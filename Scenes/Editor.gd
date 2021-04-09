@@ -13,6 +13,7 @@ func _add_node(position):
 	add_child(node)
 	node.rect_size = Vector2(80, 80)
 	node.set_position(position - node.rect_size / 2)
+	node.connect("delete", self, "_on_node_delete")
 	nodes.append(node)
 
 func _gui_input(event):
@@ -20,3 +21,8 @@ func _gui_input(event):
 		and event.button_index == BUTTON_LEFT:
 		accept_event()
 		_add_node(event.position)
+
+# TODO
+func _on_node_delete(node):
+	nodes.erase(node)
+	node.queue_free()
