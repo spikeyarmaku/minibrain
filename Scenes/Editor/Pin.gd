@@ -1,31 +1,42 @@
-extends Node2D
+tool
+extends Control
 
-var is_hover = false
+enum PIN_TYPE {INPUT, OUTPUT}
 
-# Called when the node enters the scene tree for the first time.
+var pin_type
+var is_hover = false setget set_hover, get_hover
+var radius
+var center
+
+func set_hover(h):
+	is_hover = h
+	recalculate_size()
+
+func get_hover():
+	return is_hover
+
 func _ready():
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+	recalculate_size()
+	
+func recalculate_size():
+	radius = min(rect_size.x / 2, rect_size.y / 2)
+	center = rect_size / 2
+	update()
 
 func _draw():
 	var c = Color.from_hsv(0, 0, 0.55)
-	var r = $ConnectionArea/CollisionShape2D.shape.radius
+	var r = radius
 	if is_hover == false:
-		r = r / 4
-	draw_circle(Vector2(0,0), r, c)
+		r = r / 3
+	draw_circle(center, r, c)
 
-func init(radius, pos):
-	$ConnectionArea/CollisionShape2D.shape.radius = radius
-	position = pos
-	update()
+func init(type):
+	pin_type = type
 
-func _on_ConnectionArea_mouse_entered():
-	is_hover = true
-	update()
-
-func _on_ConnectionArea_mouse_exited():
-	is_hover = false
-	update()
+func _notification(what):
+	if what == NOTIFICATION_MOUSE_ENTER:
+		set_hover(true)
+	elif what == NOTIFICATION_MOUSE_EXIT:
+		set_hover(false)
+	elif what == NOTIFICATION_RESIZED:
+		recalculate_size()
