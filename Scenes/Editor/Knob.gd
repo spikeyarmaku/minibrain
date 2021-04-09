@@ -98,20 +98,21 @@ func _gui_input(event):
 		and event.pressed and not is_knob_active:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		is_knob_active = true
-		knob_mouse_pos = event.position
+		knob_mouse_pos = event.global_position
 		accept_event()
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and event.pressed and event.doubleclick:
 		set_value(0)
+		accept_event()
 	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and not event.pressed and is_knob_active == true:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		is_knob_active = false
 		get_viewport().warp_mouse(knob_mouse_pos)
-		get_tree().set_input_as_handled()
+		accept_event()
 	elif is_knob_active and event is InputEventMouseMotion:
 		incr_value(event.relative.x * 0.05)
-		get_tree().set_input_as_handled()
+		accept_event()
 
 func _notification(what):
 	if what == NOTIFICATION_RESIZED:
