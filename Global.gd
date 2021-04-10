@@ -20,3 +20,9 @@ static func make_bezier_line(start_pos, end_pos):
 	for p in points:
 		line.add_point(p)
 	return line
+
+func vp_to_scr(point, viewport):
+	return viewport.canvas_transform * point
+
+func scr_to_vp(point, viewport):
+	return viewport.canvas_transform.affine_inverse() * point

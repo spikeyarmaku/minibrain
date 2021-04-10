@@ -8,7 +8,6 @@ const Global = preload("res://Global.gd")
 var value = 0
 
 var is_dragged = false
-var drag_offset
 var start_node : Control
 var end_node : Control
 
@@ -53,10 +52,8 @@ func _gui_input(event):
 		emit_signal("delete", self)
 	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		is_dragged = event.pressed
-		if is_dragged:
-			drag_offset = get_local_mouse_position()
 	elif is_dragged and event is InputEventMouseMotion:
-		set_position(event.global_position - drag_offset)
+		rect_position += event.relative
 
 func destroy():
 	# Disconnect from nodes

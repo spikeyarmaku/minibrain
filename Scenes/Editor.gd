@@ -10,9 +10,10 @@ var connect_node : Control = null
 var connect_to : Control = null
 var connect_type
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+var drag = false
+
+#func _ready():
+#	pass
 
 func _process(delta):
 	if connect_node != null and connect_type != null:
@@ -22,13 +23,13 @@ func _draw():
 	if connect_node == null:
 		return
 	elif connect_to == null:
-		draw_line( get_pin_position(connect_node, connect_type)
+		draw_line( Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
 				 , get_local_mouse_position(), Color.from_hsv(0, 0, 0.4), 8 )
 	else:
 		if connect_node == connect_to:
-			var start = get_pin_position(connect_node, connect_type)
-			var end = get_pin_position(connect_to,
-				Global.invert_connect_type(connect_type))
+			var start = Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
+			var end = Global.vp_to_scr(get_pin_position(connect_to,
+				Global.invert_connect_type(connect_type)), $Viewport)
 			var mid = (start + end) / 2 + Vector2(0, 150)
 			var line1 = Global.make_bezier_line(mid, start)
 			var line2 = Global.make_bezier_line(end, mid)
@@ -37,9 +38,9 @@ func _draw():
 			line1.free()
 			line2.free()
 		else:
-			draw_line( get_pin_position(connect_node, connect_type)
-					 , get_pin_position(connect_to,
-							Global.invert_connect_type(connect_type))
+			draw_line( Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
+					 , Global.vp_to_scr(get_pin_position(connect_to,
+							Global.invert_connect_type(connect_type)), $Viewport)
 					 , Color.from_hsv(0, 0, 0.4), 8 )
 
 func get_pin_position(node, connect_type):
@@ -52,7 +53,8 @@ func get_pin_position(node, connect_type):
 
 func _add_node(position):
 	var node = Node.instance()
-	add_child(node)
+	print("Add node")
+	$Viewport.add_child(node)
 	node.rect_size = Vector2(80, 80)
 	node.set_position(position - node.rect_size / 2)
 	node.connect("delete", self, "_on_node_delete")
@@ -73,10 +75,15 @@ func _connect_nodes(start_node, end_node):
 	if _are_nodes_connected(start_node, end_node):
 		return
 	var edge = Edge.instance()
-	add_child(edge)
+	$Viewport.add_child(edge)
 	edge.rect_size = Vector2(80, 80)
-	edge.rect_position = (start_node.rect_global_position + \
-						  end_node.rect_global_position) / 2
+	if start_node == end_node:
+		edge.rect_position = (start_node.rect_global_position + \
+							  end_node.rect_global_position) / 2 + \
+							 Vector2(0, 150)
+	else:
+		edge.rect_position = (start_node.rect_global_position + \
+							  end_node.rect_global_position) / 2
 	edge.start_node = start_node
 	edge.end_node = end_node
 	start_node.outgoing_edges.append(edge)
@@ -88,7 +95,23 @@ func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.doubleclick \
 		and event.button_index == BUTTON_LEFT:
 		accept_event()
-		_add_node(event.position)
+		_add_node(event.position * $Viewport/Camera2D.zoom + $Viewport/Camera2D.position)
+	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
+		and event.pressed:
+		drag = true
+	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
+		and not event.pressed:
+		drag = false
+	elif drag and event is InputEventMouseMotion:
+		$Viewport/Camera2D.position -= event.relative
+	elif event is InputEventMouseButton and \
+		event.button_index == BUTTON_WHEEL_UP:
+		# TODO use a tween
+		$Viewport/Camera2D.zoom *= 0.8
+	elif event is InputEventMouseButton and \
+		event.button_index == BUTTON_WHEEL_DOWN:
+		# TODO use a tween
+		$Viewport/Camera2D.zoom *= 1.2
 
 # TODO
 func _on_node_delete(node):

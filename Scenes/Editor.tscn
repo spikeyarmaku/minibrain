@@ -2,12 +2,19 @@
 
 [ext_resource path="res://Scenes/Editor.gd" type="Script" id=1]
 
-[node name="Editor" type="Control"]
+[node name="Editor" type="ViewportContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.0
-margin_right = 1.0
+stretch = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 100, 100 )
+usage = 0
+
+[node name="Camera2D" type="Camera2D" parent="Viewport"]
+anchor_mode = 0
+current = true

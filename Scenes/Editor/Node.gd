@@ -14,7 +14,6 @@ var outgoing_edges = []
 var is_hover = false setget set_hover, get_hover
 
 var is_dragged = false
-var drag_offset
 
 func get_output_pin():
 	return $RightPinContainer/Pin
@@ -59,11 +58,9 @@ func _gui_input(event):
 		accept_event()
 	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		is_dragged = event.pressed
-		if is_dragged:
-			drag_offset = get_local_mouse_position()
 		accept_event()
 	elif is_dragged and event is InputEventMouseMotion:
-		set_position(event.global_position - drag_offset)
+		rect_position += event.relative
 		accept_event()
 
 # This should work, but due to issue #20881 in godot it doesn't.
