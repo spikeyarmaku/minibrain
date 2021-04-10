@@ -5,8 +5,15 @@
 [ext_resource path="res://Scenes/Editor/Pin.tscn" type="PackedScene" id=3]
 
 [node name="Node" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 40.0
+margin_bottom = 40.0
+rect_pivot_offset = Vector2( 512, 300 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -23,9 +30,10 @@ __meta__ = {
 [node name="Knob" parent="KnobContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1024.0
-margin_bottom = 600.0
+margin_right = 80.0
+margin_bottom = 80.0
 rect_min_size = Vector2( 0, 0 )
+rect_pivot_offset = Vector2( 512, 300 )
 
 [node name="LeftPinContainer" type="MarginContainer" parent="."]
 anchor_left = -0.2
@@ -39,8 +47,9 @@ __meta__ = {
 [node name="Pin" parent="LeftPinContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 409.0
-margin_bottom = 240.0
+margin_right = 32.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 204.5, 120 )
 
 [node name="RightPinContainer" type="MarginContainer" parent="."]
 anchor_left = 0.8
@@ -54,5 +63,6 @@ __meta__ = {
 [node name="Pin" parent="RightPinContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 409.0
-margin_bottom = 240.0
+margin_right = 32.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 204.5, 120 )

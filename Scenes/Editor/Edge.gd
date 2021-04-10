@@ -3,6 +3,8 @@ extends Control
 
 signal delete(edge)
 
+const Global = preload("res://Global.gd")
+
 var value = 0
 
 var is_dragged = false
