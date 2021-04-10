@@ -8,11 +8,19 @@ signal hover(node)
 signal hover_end(node)
 
 var value = 0
+var incoming_edges = []
+var outgoing_edges = []
 
 var is_hover = false setget set_hover, get_hover
 
 var is_dragged = false
 var drag_offset
+
+func get_output_pin():
+	return $RightPinContainer/Pin
+	
+func get_input_pin():
+	return $LeftPinContainer/Pin
 
 func set_hover(h):
 	is_hover = h

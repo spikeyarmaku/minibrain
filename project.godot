@@ -16,7 +16,6 @@ _global_script_class_icons={
 [application]
 
 config/name="MiniBrain"
-run/main_scene="res://Scenes_old/Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
