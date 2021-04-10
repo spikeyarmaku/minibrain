@@ -87,8 +87,10 @@ func _on_connect_request_end():
 
 func destroy():
 	# Destroy edges
-	for e in incoming_edges:
+	var incoming_edge_list = incoming_edges.duplicate()
+	for e in incoming_edge_list:
 		e.destroy()
-	for e in outgoing_edges:
+	var outgoing_edge_list = outgoing_edges.duplicate()
+	for e in outgoing_edge_list:
 		e.destroy()
 	queue_free()
