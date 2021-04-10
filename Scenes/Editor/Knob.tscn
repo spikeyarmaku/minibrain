@@ -13,7 +13,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="RichTextLabel" parent="."]
+[node name="LabelValue" type="RichTextLabel" parent="."]
 anchor_left = 0.3
 anchor_top = 0.6
 anchor_right = 0.7
@@ -23,8 +23,24 @@ theme = ExtResource( 2 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 0
 bbcode_enabled = true
-bbcode_text = "[center][color=#ff00ff00]100[/color][/center]"
-text = "100"
+bbcode_text = "[center][color=#ff666666]0[/color][/center]"
+text = "0"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LabelText" type="RichTextLabel" parent="."]
+anchor_top = 0.4
+anchor_right = 1.0
+anchor_bottom = 0.7
+mouse_filter = 2
+theme = ExtResource( 2 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 0
+bbcode_enabled = true
+bbcode_text = "[center][color=#ff666666]0[/color][/center]"
+text = "0"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false

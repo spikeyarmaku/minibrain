@@ -10,5 +10,3 @@ __meta__ = {
 }
 
 [node name="Editor" parent="." instance=ExtResource( 1 )]
-margin_left = 0.0
-margin_right = 0.0

@@ -15,6 +15,18 @@ var is_hover = false setget set_hover, get_hover
 
 var is_dragged = false
 
+var is_deletable = true
+
+func set_input_only(label):
+	$KnobContainer/Knob.label_and_disable(label)
+	$LeftPinContainer.visible = false
+	is_deletable = false
+	
+func set_output_only(label):
+	$KnobContainer/Knob.label_and_disable(label)
+	$RightPinContainer.visible = false
+	is_deletable = false
+
 func get_output_pin():
 	return $RightPinContainer/Pin
 	

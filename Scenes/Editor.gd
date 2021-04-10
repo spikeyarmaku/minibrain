@@ -12,8 +12,23 @@ var connect_type
 
 var drag = false
 
-#func _ready():
-#	pass
+func _ready():
+	set_inputs_outputs(["input1", "input2"], ["output1", "output2", "output3"])
+
+func set_inputs_outputs(input_strings, output_strings):
+	for i in input_strings.size():
+		add_input_node(input_strings[i], Vector2(100, (i + 1) * 100))
+	for i in output_strings.size():
+		add_output_node(output_strings[i],
+			Vector2(rect_size.x - 100, (i + 1) * 100))
+
+func add_input_node(label, position):
+	var node = _add_node(position)
+	node.set_input_only(label)
+	
+func add_output_node(label, position):
+	var node = _add_node(position)
+	node.set_output_only(label)
 
 func _process(delta):
 	if connect_node != null and connect_type != null:
@@ -63,6 +78,7 @@ func _add_node(position):
 	node.connect("hover", self, "_on_node_hover")
 	node.connect("hover_end", self, "_on_node_hover_end")
 	nodes.append(node)
+	return node
 
 # Checks if node1's output is connected to node2's input
 func _are_nodes_connected(node1, node2):
@@ -115,8 +131,9 @@ func _gui_input(event):
 
 # TODO
 func _on_node_delete(node):
-	nodes.erase(node)
-	node.destroy()
+	if node.is_deletable:
+		nodes.erase(node)
+		node.destroy()
 
 # TODO
 func _on_edge_delete(edge):

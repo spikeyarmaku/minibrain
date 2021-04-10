@@ -10,10 +10,23 @@ var _color_knob : Color = Color.from_hsv(0, 0, 0.4)
 var _color_outline : Color = Color.from_hsv(0, 0, 0.15)
 const _outline_width = 2
 
+var is_disabled = false
+var label_text
+var label_value
 var is_knob_active = false
 var knob_mouse_pos
 var radius = 10
 var center = Vector2(0,0)
+
+func label_and_disable(label):
+	var color = Color.from_hsv(0, 0, 0.8)
+	label_text.bbcode_text = \
+			"[center][color=#" + color.to_html() + "]" + label + \
+			"[/color][/center]"
+	label_text.theme.default_font.size = 2 * radius / 5
+	is_disabled = true
+	label_text.visible = true
+	label_value.visible = false
 
 func set_value(val):
 	_value = min(max(-100, val), 100)
@@ -26,6 +39,9 @@ func incr_value(by_val):
 	set_value(_value + by_val)
 
 func _ready():
+	label_value = $LabelValue
+	label_text = $LabelText
+	label_text.visible = false
 	recalculate_size()
 	
 func recalculate_size():
@@ -39,18 +55,19 @@ func recalculate_size():
 
 func _draw():
 	_draw_body()
-	_draw_knob()
-	var color
-	if floor(_value) == 0:
-		color = Color.from_hsv(0, 0, 0.4)
-	elif _value > 0:
-		color = Color(0, 1, 0)
-	else:
-		color = Color(1, 0, 0)
-	$Label.theme.default_font.size = 2 * radius / 5
-	$Label.bbcode_text = \
-		"[center][color=#" + color.to_html() + "]" + str(floor(_value)) + \
-		"[/color][/center]"
+	if not is_disabled:
+		_draw_knob()
+		var color
+		if floor(_value) == 0:
+			color = Color.from_hsv(0, 0, 0.4)
+		elif _value > 0:
+			color = Color(0, 1, 0)
+		else:
+			color = Color(1, 0, 0)
+		label_value.theme.default_font.size = 2 * radius / 5
+		label_value.bbcode_text = \
+			"[center][color=#" + color.to_html() + "]" + str(floor(_value)) + \
+			"[/color][/center]"
 
 func _draw_body():
 	if type == Global.KNOB_TYPE.NODE_KNOB:
@@ -92,6 +109,8 @@ func draw_circle_arc(center, r, angle_from, angle_to, color):
 	draw_colored_polygon(points_arc, color)
 
 func _gui_input(event):
+	if is_disabled:
+		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and event.pressed and not is_knob_active:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
