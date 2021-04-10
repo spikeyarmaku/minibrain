@@ -35,9 +35,9 @@ func _ready():
 	knob.type = Global.KNOB_TYPE.NODE_KNOB
 	lpin.init(Global.PIN_TYPE.INPUT)
 	rpin.init(Global.PIN_TYPE.OUTPUT)
-	lpin.connect("connect_request", self, "_on_output_connect_request")
+	lpin.connect("connect_request", self, "_on_input_connect_request")
 	lpin.connect("connect_request_end", self, "_on_connect_request_end")
-	rpin.connect("connect_request", self, "_on_input_connect_request")
+	rpin.connect("connect_request", self, "_on_output_connect_request")
 	rpin.connect("connect_request_end", self, "_on_connect_request_end")
 
 var mouse_in = false

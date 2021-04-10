@@ -36,17 +36,16 @@ func _draw():
 			draw_polyline(line2.points, Color.from_hsv(0, 0, 0.4), 8)
 		else:
 			draw_line( get_pin_position(connect_node, connect_type)
-					 , get_pin_position(
-							connect_to,
+					 , get_pin_position(connect_to,
 							Global.invert_connect_type(connect_type))
 					 , Color.from_hsv(0, 0, 0.4), 8 )
 
 func get_pin_position(node, connect_type):
 	var pin
 	if connect_type == Global.CONNECT_TYPE.INPUT_OUTPUT:
-		pin = node.get_output_pin()
-	else:
 		pin = node.get_input_pin()
+	else:
+		pin = node.get_output_pin()
 	return pin.rect_global_position + pin.rect_size / 2
 
 func _add_node(position):
@@ -61,7 +60,16 @@ func _add_node(position):
 	node.connect("hover_end", self, "_on_node_hover_end")
 	nodes.append(node)
 
+# Checks if node1's output is connected to node2's input
+func _are_nodes_connected(node1, node2):
+	for e in node1.outgoing_edges:
+		if e.end_node == node2:
+			return true
+	return false
+
 func _connect_nodes(start_node, end_node):
+	if _are_nodes_connected(start_node, end_node):
+		return
 	var edge = Edge.instance()
 	add_child(edge)
 	edge.rect_size = Vector2(80, 80)
