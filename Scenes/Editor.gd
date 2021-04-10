@@ -34,6 +34,8 @@ func _draw():
 			var line2 = Global.make_bezier_line(end, mid)
 			draw_polyline(line1.points, Color.from_hsv(0, 0, 0.4), 8)
 			draw_polyline(line2.points, Color.from_hsv(0, 0, 0.4), 8)
+			line1.free()
+			line2.free()
 		else:
 			draw_line( get_pin_position(connect_node, connect_type)
 					 , get_pin_position(connect_to,
@@ -91,12 +93,12 @@ func _gui_input(event):
 # TODO
 func _on_node_delete(node):
 	nodes.erase(node)
-	node.queue_free()
+	node.destroy()
 
 # TODO
 func _on_edge_delete(edge):
 	edges.erase(edge)
-	edge.queue_free()
+	edge.destroy()
 
 func _on_connect_request(conn_node, conn_type):
 	connect_node = conn_node

@@ -19,7 +19,8 @@ func _process(delta):
 	update()
 
 func _draw():
-	var pos = rect_size / 2
+	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0)
+	var right_pos = rect_size / 2 + Vector2(rect_size.x / 2, 0)
 	var start_pos
 	if start_node == null:
 		start_pos = Vector2(0,0)
@@ -37,10 +38,12 @@ func _draw():
 #		start_pos = get_global_mouse_position()
 #	if end_point == null:
 #		end_pos = get_global_mouse_position()
-	var line1 : Line2D = Global.make_bezier_line(start_pos - rect_position, pos)
-	var line2 : Line2D = Global.make_bezier_line(pos, end_pos - rect_position)
+	var line1 : Line2D = Global.make_bezier_line(start_pos - rect_position, left_pos)
+	var line2 : Line2D = Global.make_bezier_line(right_pos, end_pos - rect_position)
 	draw_polyline(line1.points, Color.from_hsv(0, 0, 0.4), 8)
 	draw_polyline(line2.points, Color.from_hsv(0, 0, 0.4), 8)
+	line1.free()
+	line2.free()
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
@@ -53,3 +56,8 @@ func _gui_input(event):
 	elif is_dragged and event is InputEventMouseMotion:
 		set_position(event.global_position - drag_offset)
 
+func destroy():
+	# Disconnect from nodes
+	start_node.outgoing_edges.erase(self)
+	end_node.incoming_edges.erase(self)
+	queue_free()

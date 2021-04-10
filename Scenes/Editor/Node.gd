@@ -84,3 +84,11 @@ func _on_input_connect_request():
 
 func _on_connect_request_end():
 	emit_signal("connect_request_end")
+
+func destroy():
+	# Destroy edges
+	for e in incoming_edges:
+		e.destroy()
+	for e in outgoing_edges:
+		e.destroy()
+	queue_free()
