@@ -1,11 +1,9 @@
 tool
 extends Control
 
-enum KNOB_TYPE {NODE_KNOB, EDGE_KNOB}
+var type = Global.KNOB_TYPE.NODE_KNOB
 
-var type = KNOB_TYPE.NODE_KNOB
-
-var _value = 100 setget set_value, get_value
+var _value = 0 setget set_value, get_value
 
 var _color_node : Color = Color.from_hsv(0, 0, 0.2)
 var _color_knob : Color = Color.from_hsv(0, 0, 0.4)
@@ -55,7 +53,7 @@ func _draw():
 		"[/color][/center]"
 
 func _draw_body():
-	if type == KNOB_TYPE.NODE_KNOB:
+	if type == Global.KNOB_TYPE.NODE_KNOB:
 		# outline
 		draw_circle(center, radius + _outline_width, _color_outline)
 		# base
@@ -76,7 +74,7 @@ func _draw_body():
 
 func _draw_knob():
 	var r = radius  * _value / 100
-	if type == KNOB_TYPE.NODE_KNOB:
+	if type == Global.KNOB_TYPE.NODE_KNOB:
 		draw_circle_arc(center, r, PI / 2, -PI / 2, _color_knob)
 	else:
 		var points = [ Vector2(0, r) + center

@@ -1,12 +1,13 @@
 tool
 extends Control
 
-enum PIN_TYPE {INPUT, OUTPUT}
+signal connect_request()
+signal connect_request_end()
 
 var pin_type
 var is_hover = false setget set_hover, get_hover
-var radius
-var center
+var radius = 10
+var center = Vector2(0,0)
 
 func set_hover(h):
 	is_hover = h
@@ -32,6 +33,16 @@ func _draw():
 
 func init(type):
 	pin_type = type
+
+func _gui_input(event):
+	if event is InputEventMouseButton and event.pressed and is_hover and \
+		event.button_index == BUTTON_LEFT:
+		emit_signal("connect_request")
+		accept_event()
+	elif event is InputEventMouseButton and is_hover and not event.pressed and \
+		event.button_index == BUTTON_LEFT:
+		emit_signal("connect_request_end")
+		accept_event()
 
 func _notification(what):
 	if what == NOTIFICATION_MOUSE_ENTER:

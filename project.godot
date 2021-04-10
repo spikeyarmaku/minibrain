@@ -19,6 +19,10 @@ config/name="MiniBrain"
 run/main_scene="res://Scenes_old/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
