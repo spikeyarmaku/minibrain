@@ -44,6 +44,10 @@ func _draw():
 	$LeftLine.default_color = Color.from_hsv(0, 0, 0.4)
 	Global.curve_line($RightLine, right_pos, end_pos - rect_position)
 	$RightLine.default_color = Color.from_hsv(0, 0, 0.4)
+	Global.curve_line($LeftOutline, start_pos - rect_position, left_pos)
+	$LeftOutline.default_color = Color.from_hsv(0, 0, 0.2)
+	Global.curve_line($RightOutline, right_pos, end_pos - rect_position)
+	$RightOutline.default_color = Color.from_hsv(0, 0, 0.2)
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
