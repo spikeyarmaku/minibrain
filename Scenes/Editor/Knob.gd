@@ -18,6 +18,16 @@ var knob_mouse_pos
 var radius = 10
 var center = Vector2(0,0)
 
+func minimize():
+	rect_scale = Vector2(0.5, 0.5)
+	if type == Global.KNOB_TYPE.EDGE_KNOB:
+		$LabelValue.visible = false
+
+func maximize():
+	rect_scale = Vector2(1, 1)
+	if type == Global.KNOB_TYPE.EDGE_KNOB:
+		$LabelValue.visible = true
+
 func label_and_disable(label):
 	var color = Color.from_hsv(0, 0, 0.8)
 	label_text.bbcode_text = \

@@ -7,21 +7,34 @@ const Global = preload("res://Global.gd")
 
 var value = 0
 
+var is_hover = false setget set_hover, get_hover
 var is_dragged = false
 var start_node : Control
 var end_node : Control
 
+func set_hover(h):
+	is_hover = h
+	if is_hover:
+		$Knob.maximize()
+	else:
+		$Knob.minimize()
+	
+func get_hover():
+	return is_hover
+
 func _ready():
 	$Knob.type = Global.KNOB_TYPE.EDGE_KNOB
 	$Knob.set_value(100)
+	$Knob.rect_pivot_offset = $Knob.rect_size / 2
+	set_hover(false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	update()
 
 func _draw():
-	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0)
-	var right_pos = rect_size / 2 + Vector2(rect_size.x / 2, 0)
+	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0) * $Knob.rect_scale
+	var right_pos = rect_size / 2 + Vector2(rect_size.x / 2, 0) * $Knob.rect_scale
 	var start_pos
 	if start_node == null:
 		start_pos = Vector2(0,0)
@@ -57,6 +70,12 @@ func _gui_input(event):
 		is_dragged = event.pressed
 	elif is_dragged and event is InputEventMouseMotion:
 		rect_position += event.relative
+
+func _notification(what):
+	if what == NOTIFICATION_MOUSE_ENTER:
+		set_hover(true)
+	elif what == NOTIFICATION_MOUSE_EXIT:
+		set_hover(false)
 
 func destroy():
 	# Disconnect from nodes
