@@ -13,17 +13,21 @@ static func invert_connect_type(connect_type):
 
 static func make_bezier_line(start_pos, end_pos):
 	var line = Line2D.new()
+	curve_line(line, start_pos, end_pos)
+	return line
+
+static func curve_line(line2D, start_pos, end_pos):
 	var curve = Curve2D.new()
 	var ctr_vector = Vector2(abs(end_pos.x - start_pos.x), 0)
 	curve.add_point(start_pos, Vector2(0,0), ctr_vector)
 	curve.add_point(end_pos, -ctr_vector, Vector2(0,0))
 	var points = curve.tessellate()
+	line2D.clear_points()
 	for p in points:
-		line.add_point(p)
-	return line
+		line2D.add_point(p)
 
-func vp_to_scr(point, viewport):
+static func vp_to_scr(point, viewport):
 	return viewport.canvas_transform * point
 
-func scr_to_vp(point, viewport):
+static func scr_to_vp(point, viewport):
 	return viewport.canvas_transform.affine_inverse() * point

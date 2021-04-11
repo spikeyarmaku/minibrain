@@ -18,5 +18,4 @@ usage = 0
 render_target_update_mode = 3
 
 [node name="Camera2D" type="Camera2D" parent="Viewport"]
-anchor_mode = 0
 current = true

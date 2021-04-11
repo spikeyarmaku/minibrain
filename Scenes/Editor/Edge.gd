@@ -40,9 +40,9 @@ func _draw():
 			end_pos = Vector2(0,0)
 		else:
 			end_pos = pin.rect_global_position + pin.rect_size / 2
-	$LeftLine.points = Global.make_bezier_line(start_pos - rect_position, left_pos).points
+	Global.curve_line($LeftLine, start_pos - rect_position, left_pos)
 	$LeftLine.default_color = Color.from_hsv(0, 0, 0.4)
-	$RightLine.points = Global.make_bezier_line(right_pos, end_pos - rect_position).points
+	Global.curve_line($RightLine, right_pos, end_pos - rect_position)
 	$RightLine.default_color = Color.from_hsv(0, 0, 0.4)
 
 func _gui_input(event):

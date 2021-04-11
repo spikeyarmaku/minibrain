@@ -12,7 +12,10 @@ var connect_type
 
 var drag = false
 
+const zoom_factor = 1.2
+
 func _ready():
+	$Viewport/Camera2D.position = rect_size / 2
 	set_inputs_outputs(["input1", "input2"], ["output1", "output2", "output3"])
 
 func set_inputs_outputs(input_strings, output_strings):
@@ -122,7 +125,7 @@ func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.doubleclick \
 		and event.button_index == BUTTON_LEFT:
 		accept_event()
-		_add_node(event.position * $Viewport/Camera2D.zoom + $Viewport/Camera2D.position)
+		_add_node(Global.scr_to_vp(event.position, $Viewport))
 	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and event.pressed:
 		drag = true
@@ -130,15 +133,17 @@ func _gui_input(event):
 		and not event.pressed:
 		drag = false
 	elif drag and event is InputEventMouseMotion:
-		$Viewport/Camera2D.position -= event.relative
-	elif event is InputEventMouseButton and \
+		$Viewport/Camera2D.position -= event.relative * $Viewport/Camera2D.zoom
+		
+func _input(event):
+	if event is InputEventMouseButton and \
 		event.button_index == BUTTON_WHEEL_UP:
 		# TODO use a tween
-		$Viewport/Camera2D.zoom *= 0.8
+		$Viewport/Camera2D.zoom /= zoom_factor
 	elif event is InputEventMouseButton and \
 		event.button_index == BUTTON_WHEEL_DOWN:
 		# TODO use a tween
-		$Viewport/Camera2D.zoom *= 1.2
+		$Viewport/Camera2D.zoom *= zoom_factor
 
 # TODO
 func _on_node_delete(node):
