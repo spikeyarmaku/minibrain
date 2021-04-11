@@ -3,6 +3,7 @@ extends Node
 enum PIN_TYPE {INPUT, OUTPUT}
 enum CONNECT_TYPE {INPUT_OUTPUT, OUTPUT_INPUT}
 enum KNOB_TYPE {NODE_KNOB, EDGE_KNOB}
+enum NODE_TYPE {INPUT_OUTPUT_NODE, INPUT_NODE, OUTPUT_NODE}
 
 static func invert_connect_type(connect_type):
 	if connect_type == CONNECT_TYPE.INPUT_OUTPUT:

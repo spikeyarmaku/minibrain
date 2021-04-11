@@ -7,6 +7,8 @@ signal connect_request_end()
 signal hover(node)
 signal hover_end(node)
 
+var node_type = Global.NODE_TYPE.INPUT_OUTPUT_NODE
+
 var value = 0
 var incoming_edges = []
 var outgoing_edges = []
@@ -21,17 +23,25 @@ func set_input_only(label):
 	$KnobContainer/Knob.label_and_disable(label)
 	$LeftPinContainer.visible = false
 	is_deletable = false
+	node_type = Global.NODE_TYPE.INPUT_NODE
 	
 func set_output_only(label):
 	$KnobContainer/Knob.label_and_disable(label)
 	$RightPinContainer.visible = false
 	is_deletable = false
+	node_type = Global.NODE_TYPE.OUTPUT_NODE
 
 func get_output_pin():
-	return $RightPinContainer/Pin
+	if $RightPinContainer.visible:
+		return $RightPinContainer/Pin
+	else:
+		return null
 	
 func get_input_pin():
-	return $LeftPinContainer/Pin
+	if $LeftPinContainer.visible:
+		return $LeftPinContainer/Pin
+	else:
+		return null
 
 func set_hover(h):
 	is_hover = h

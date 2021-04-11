@@ -27,24 +27,23 @@ func _draw():
 		start_pos = Vector2(0,0)
 	else:
 		var pin = start_node.get_output_pin()
-		start_pos = pin.rect_global_position + pin.rect_size / 2
+		if pin == null:
+			start_pos = Vector2(0, 0)
+		else:
+			start_pos = pin.rect_global_position + pin.rect_size / 2
 	var end_pos
 	if end_node == null:
 		end_pos = Vector2(0,0)
 	else:
 		var pin = end_node.get_input_pin()
-		end_pos = pin.rect_global_position + pin.rect_size / 2
-#		end_pos = end_node.rect_position + end_node.rect_size / 2
-#	if start_point == null:
-#		start_pos = get_global_mouse_position()
-#	if end_point == null:
-#		end_pos = get_global_mouse_position()
-	var line1 : Line2D = Global.make_bezier_line(start_pos - rect_position, left_pos)
-	var line2 : Line2D = Global.make_bezier_line(right_pos, end_pos - rect_position)
-	draw_polyline(line1.points, Color.from_hsv(0, 0, 0.4), 8)
-	draw_polyline(line2.points, Color.from_hsv(0, 0, 0.4), 8)
-	line1.free()
-	line2.free()
+		if pin == null:
+			end_pos = Vector2(0,0)
+		else:
+			end_pos = pin.rect_global_position + pin.rect_size / 2
+	$LeftLine.points = Global.make_bezier_line(start_pos - rect_position, left_pos).points
+	$LeftLine.default_color = Color.from_hsv(0, 0, 0.4)
+	$RightLine.points = Global.make_bezier_line(right_pos, end_pos - rect_position).points
+	$RightLine.default_color = Color.from_hsv(0, 0, 0.4)
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \

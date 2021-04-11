@@ -31,6 +31,7 @@ __meta__ = {
 }
 
 [node name="LabelText" type="RichTextLabel" parent="."]
+visible = false
 anchor_top = 0.4
 anchor_right = 1.0
 anchor_bottom = 0.7

@@ -41,10 +41,15 @@ func _draw():
 		draw_line( Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
 				 , get_local_mouse_position(), Color.from_hsv(0, 0, 0.4), 8 )
 	else:
+		var start_pin_pos = get_pin_position(connect_node, connect_type)
+		var end_pin_pos = get_pin_position(connect_to,
+			Global.invert_connect_type(connect_type))
+		if start_pin_pos == null or end_pin_pos == null:
+			return
+		
 		if connect_node == connect_to:
-			var start = Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
-			var end = Global.vp_to_scr(get_pin_position(connect_to,
-				Global.invert_connect_type(connect_type)), $Viewport)
+			var start = Global.vp_to_scr(start_pin_pos, $Viewport)
+			var end = Global.vp_to_scr(end_pin_pos, $Viewport)
 			var mid = (start + end) / 2 + Vector2(0, 150)
 			var line1 = Global.make_bezier_line(mid, start)
 			var line2 = Global.make_bezier_line(end, mid)
@@ -53,9 +58,8 @@ func _draw():
 			line1.free()
 			line2.free()
 		else:
-			draw_line( Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
-					 , Global.vp_to_scr(get_pin_position(connect_to,
-							Global.invert_connect_type(connect_type)), $Viewport)
+			draw_line( Global.vp_to_scr(start_pin_pos, $Viewport)
+					 , Global.vp_to_scr(end_pin_pos, $Viewport)
 					 , Color.from_hsv(0, 0, 0.4), 8 )
 
 func get_pin_position(node, connect_type):
@@ -64,7 +68,10 @@ func get_pin_position(node, connect_type):
 		pin = node.get_input_pin()
 	else:
 		pin = node.get_output_pin()
-	return pin.rect_global_position + pin.rect_size / 2
+	if pin == null:
+		return null
+	else:
+		return pin.rect_global_position + pin.rect_size / 2
 
 func _add_node(position):
 	var node = Node.instance()
@@ -81,14 +88,18 @@ func _add_node(position):
 	return node
 
 # Checks if node1's output is connected to node2's input
-func _are_nodes_connected(node1, node2):
+func _can_nodes_connect(node1, node2):
+	# Are they already connected?
 	for e in node1.outgoing_edges:
 		if e.end_node == node2:
-			return true
-	return false
+			return false
+	# Do they have the right pins? (E.g. 2 input-only nodes can't be connected)
+	if node1.get_output_pin() == null or node2.get_input_pin() == null:
+		return false
+	return true
 
 func _connect_nodes(start_node, end_node):
-	if _are_nodes_connected(start_node, end_node):
+	if not _can_nodes_connect(start_node, end_node):
 		return
 	var edge = Edge.instance()
 	$Viewport.add_child(edge)
@@ -112,10 +123,10 @@ func _gui_input(event):
 		and event.button_index == BUTTON_LEFT:
 		accept_event()
 		_add_node(event.position * $Viewport/Camera2D.zoom + $Viewport/Camera2D.position)
-	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
+	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and event.pressed:
 		drag = true
-	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
+	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and not event.pressed:
 		drag = false
 	elif drag and event is InputEventMouseMotion:
