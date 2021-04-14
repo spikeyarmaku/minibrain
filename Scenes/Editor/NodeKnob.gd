@@ -1,7 +1,9 @@
 tool
 extends Control
 
-var type = Global.KNOB_TYPE.NODE_KNOB
+enum ACTIVATION_FUNCTION {STEP, LINEAR}
+
+var _func_type = ACTIVATION_FUNCTION.STEP
 
 var _value = 0 setget set_value, get_value
 
@@ -18,16 +20,7 @@ var knob_mouse_pos
 var radius = 10
 var center = Vector2(0,0)
 
-func minimize():
-	rect_scale = Vector2(0.5, 0.5)
-	if type == Global.KNOB_TYPE.EDGE_KNOB:
-		$LabelValue.visible = false
-
-func maximize():
-	rect_scale = Vector2(1, 1)
-	if type == Global.KNOB_TYPE.EDGE_KNOB:
-		$LabelValue.visible = true
-
+# For input and output nodes
 func label_and_disable(label):
 	var color = Color.from_hsv(0, 0, 0.8)
 	label_text.bbcode_text = \
@@ -43,10 +36,17 @@ func set_value(val):
 	update()
 
 func get_value():
-	return _value
+	return int(round(_value))
 
 func incr_value(by_val):
 	set_value(_value + by_val)
+
+func _switch_func_type():
+	if _func_type == ACTIVATION_FUNCTION.LINEAR:
+		_func_type = ACTIVATION_FUNCTION.STEP
+	else:
+		_func_type = ACTIVATION_FUNCTION.LINEAR
+	update()
 
 func _ready():
 	label_value = $LabelValue
@@ -59,55 +59,45 @@ func recalculate_size():
 	center = rect_size / 2
 	update()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
 func _draw():
 	_draw_body()
 	if not is_disabled:
 		_draw_knob()
+		_draw_func_type()
 		var color
-		if floor(_value) == 0:
-			color = Color.from_hsv(0, 0, 0.4)
-		elif _value > 0:
+		if get_value() == 0:
+			color = Color.from_hsv(0, 0, 0.8)
+		elif get_value() > 0:
 			color = Color(0, 1, 0)
 		else:
 			color = Color(1, 0, 0)
 		label_value.theme.default_font.size = 2 * radius / 5
 		label_value.bbcode_text = \
-			"[center][color=#" + color.to_html() + "]" + str(floor(_value)) + \
+			"[center][color=#" + color.to_html() + "]" + str(get_value()) + \
 			"[/color][/center]"
 
 func _draw_body():
-	if type == Global.KNOB_TYPE.NODE_KNOB:
-		# outline
-		draw_circle(center, radius + _outline_width, _color_outline)
-		# base
-		draw_circle(center, radius, _color_node)
-	else:
-		var points_outline = [ Vector2(0, radius + _outline_width) + center
-							 , Vector2(radius + _outline_width, 0) + center
-							 , Vector2(0, -radius - _outline_width) + center
-							 , Vector2(-radius - _outline_width, 0) + center ]
-		var points = [ Vector2(0,  radius) + center
-					 , Vector2( radius, 0) + center
-					 , Vector2(0, -radius) + center
-					 , Vector2(-radius, 0) + center ]
-		# outline
-		draw_colored_polygon(PoolVector2Array(points_outline), _color_outline)
-		# base
-		draw_colored_polygon(PoolVector2Array(points), _color_node)
+	# outline
+	draw_circle(center, radius + _outline_width, _color_outline)
+	# base
+	draw_circle(center, radius, _color_node)
 
 func _draw_knob():
-	var r = radius  * _value / 100
-	if type == Global.KNOB_TYPE.NODE_KNOB:
-		draw_circle_arc(center, r, PI / 2, -PI / 2, _color_knob)
+	var angle = get_value() / 100.0
+	draw_circle_arc(center, radius, -PI, -(1 - angle) * PI / 2, _color_knob)
+
+func _draw_func_type():
+	var color = Color.from_hsv(0, 0, 0.4)
+	var points = PoolVector2Array()
+	if _func_type == ACTIVATION_FUNCTION.STEP:
+		points.append(center + Vector2(-radius / 2, 6 * radius / 8))
+		points.append(center + Vector2(0, 6 * radius / 8))
+		points.append(center + Vector2(0, 2 * radius / 8))
+		points.append(center + Vector2(radius / 2, 2 * radius / 8))
 	else:
-		var points = [ Vector2(0, r) + center
-					 , Vector2(r, 0) + center
-					 , Vector2(0, -r) + center ]
-		draw_colored_polygon(PoolVector2Array(points), _color_knob)
+		points.append(center + Vector2(-radius / 2, 6 * radius / 8))
+		points.append(center + Vector2(radius / 2, 2 * radius / 8))
+	draw_polyline(points, color, 5)
 
 func draw_circle_arc(center, r, angle_from, angle_to, color):
 	var nb_points = 32
@@ -121,16 +111,24 @@ func draw_circle_arc(center, r, angle_from, angle_to, color):
 func _gui_input(event):
 	if is_disabled:
 		return
+	# Reset the knob by double right-clicking
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
-		and event.pressed and not is_knob_active:
+		and event.pressed and event.doubleclick and \
+		event.position.y < rect_size.y / 2:
+		set_value(0)
+		accept_event()
+	# Move the knob by right-dragging
+	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
+		and event.pressed and not is_knob_active and \
+		event.position.y < rect_size.y / 2:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		is_knob_active = true
 		knob_mouse_pos = event.global_position
 		accept_event()
-	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
-		and event.pressed and event.doubleclick:
-		set_value(0)
-		accept_event()
+	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
+		and event.pressed and event.position.y >= rect_size.y / 2:
+		_switch_func_type()
+	# Release the knob
 	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and not event.pressed and is_knob_active == true:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

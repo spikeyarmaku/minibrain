@@ -12,20 +12,22 @@ var is_dragged = false
 var start_node : Control
 var end_node : Control
 
+var knob
+
 func set_hover(h):
 	is_hover = h
 	if is_hover:
-		$Knob.maximize()
+		knob.maximize()
 	else:
-		$Knob.minimize()
+		knob.minimize()
 	
 func get_hover():
 	return is_hover
 
 func _ready():
-	$Knob.type = Global.KNOB_TYPE.EDGE_KNOB
-	$Knob.set_value(100)
-	$Knob.rect_pivot_offset = $Knob.rect_size / 2
+	knob = $EdgeKnob
+	knob.set_value(100)
+	knob.rect_pivot_offset = knob.rect_size / 2
 	set_hover(false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,8 +35,8 @@ func _process(delta):
 	update()
 
 func _draw():
-	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0) * $Knob.rect_scale
-	var right_pos = rect_size / 2 + Vector2(rect_size.x / 2, 0) * $Knob.rect_scale
+	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0) * knob.rect_scale
+	var right_pos = rect_size / 2 + Vector2(rect_size.x / 2, 0) * knob.rect_scale
 	var start_pos
 	if start_node == null:
 		start_pos = Vector2(0,0)

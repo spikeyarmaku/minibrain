@@ -19,14 +19,16 @@ var is_dragged = false
 
 var is_deletable = true
 
+var knob
+
 func set_input_only(label):
-	$KnobContainer/Knob.label_and_disable(label)
+	knob.label_and_disable(label)
 	$LeftPinContainer.visible = false
 	is_deletable = false
 	node_type = Global.NODE_TYPE.INPUT_NODE
 	
 func set_output_only(label):
-	$KnobContainer/Knob.label_and_disable(label)
+	knob.label_and_disable(label)
 	$RightPinContainer.visible = false
 	is_deletable = false
 	node_type = Global.NODE_TYPE.OUTPUT_NODE
@@ -50,10 +52,9 @@ func get_hover():
 	return is_hover
 
 func _ready():
-	var knob = $KnobContainer/Knob
+	knob = $KnobContainer/NodeKnob
 	var lpin = $LeftPinContainer/Pin
 	var rpin = $RightPinContainer/Pin
-	knob.type = Global.KNOB_TYPE.NODE_KNOB
 	lpin.init(Global.PIN_TYPE.INPUT)
 	rpin.init(Global.PIN_TYPE.OUTPUT)
 	lpin.connect("connect_request", self, "_on_input_connect_request")
