@@ -26,7 +26,8 @@ func get_hover():
 
 func _ready():
 	knob = $EdgeKnob
-	knob.set_value(100)
+	knob.set_weight(100)
+	knob.set_decay(0)
 	knob.rect_pivot_offset = knob.rect_size / 2
 	set_hover(false)
 
