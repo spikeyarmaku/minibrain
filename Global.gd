@@ -31,3 +31,17 @@ static func vp_to_scr(point, viewport):
 
 static func scr_to_vp(point, viewport):
 	return viewport.canvas_transform.affine_inverse() * point
+
+static func get_camera_2d(viewport):
+	var objects = [viewport]
+	while true:
+		if objects.size() == 0:
+			return null
+		var children = []
+		for o in objects:
+			for oc in o.get_children():
+				children.append(oc)
+		for c in children:
+			if c is Camera2D:
+				return c
+		objects = children

@@ -1,10 +1,14 @@
-extends Control
+extends Node2D
+
+#enum PERM {CREATE_NODE, DELETE_NODE, DELETE_EDGE, CONNECT_NODES}
 
 const Node = preload("res://Scenes/Editor/Node.tscn")
 const Edge = preload("res://Scenes/Editor/Edge.tscn")
 
 var nodes = []
 var edges = []
+#var perms = [PERM.CREATE_NODE, PERM.CONNECT_NODES, PERM.DELETE_EDGE,
+#			 PERM.DELETE_NODE]
 
 var connect_node : Control = null
 var connect_to : Control = null
@@ -14,24 +18,37 @@ var drag = false
 
 const zoom_factor = 1.2
 
+var camera
+var viewport
+
 func _ready():
-	$Viewport/Camera2D.position = rect_size / 2
+	camera = $Camera2D
+	viewport = get_viewport()
+	center_camera()
 	set_inputs_outputs(["input1", "input2"], ["output1", "output2", "output3"])
+
+func center_camera():
+	camera.position = Vector2(0,0)
+
+func set_zoom_level(zoom):
+	camera.zoom = Vector2(zoom, zoom)
 
 func set_inputs_outputs(input_strings, output_strings):
 	for i in input_strings.size():
-		add_input_node(input_strings[i], Vector2(100, (i + 1) * 100))
+		add_input_node(input_strings[i], Vector2(-100, (i + 1) * 100))
 	for i in output_strings.size():
 		add_output_node(output_strings[i],
-			Vector2(rect_size.x - 100, (i + 1) * 100))
+			Vector2(100, (i + 1) * 100))
 
 func add_input_node(label, position):
 	var node = _add_node(position)
 	node.set_input_only(label)
+	return node
 	
 func add_output_node(label, position):
 	var node = _add_node(position)
 	node.set_output_only(label)
+	return node
 
 func _process(delta):
 	if connect_node != null and connect_type != null:
@@ -41,7 +58,7 @@ func _draw():
 	if connect_node == null:
 		return
 	elif connect_to == null:
-		draw_line( Global.vp_to_scr(get_pin_position(connect_node, connect_type), $Viewport)
+		draw_line( get_pin_position(connect_node, connect_type)
 				 , get_local_mouse_position(), Color.from_hsv(0, 0, 0.4), 8 )
 	else:
 		var start_pin_pos = get_pin_position(connect_node, connect_type)
@@ -51,8 +68,8 @@ func _draw():
 			return
 		
 		if connect_node == connect_to:
-			var start = Global.vp_to_scr(start_pin_pos, $Viewport)
-			var end = Global.vp_to_scr(end_pin_pos, $Viewport)
+			var start = start_pin_pos
+			var end = end_pin_pos
 			var mid = (start + end) / 2 + Vector2(0, 150)
 			var line1 = Global.make_bezier_line(mid, start)
 			var line2 = Global.make_bezier_line(end, mid)
@@ -61,9 +78,7 @@ func _draw():
 			line1.free()
 			line2.free()
 		else:
-			draw_line( Global.vp_to_scr(start_pin_pos, $Viewport)
-					 , Global.vp_to_scr(end_pin_pos, $Viewport)
-					 , Color.from_hsv(0, 0, 0.4), 8 )
+			draw_line(start_pin_pos, end_pin_pos, Color.from_hsv(0, 0, 0.4), 8)
 
 func get_pin_position(node, connect_type):
 	var pin
@@ -78,8 +93,7 @@ func get_pin_position(node, connect_type):
 
 func _add_node(position):
 	var node = Node.instance()
-	print("Add node")
-	$Viewport.add_child(node)
+	add_child(node)
 	node.rect_size = Vector2(80, 80)
 	node.set_position(position - node.rect_size / 2)
 	node.connect("delete", self, "_on_node_delete")
@@ -92,10 +106,11 @@ func _add_node(position):
 
 # Checks if node1's output is connected to node2's input
 func _can_nodes_connect(node1, node2):
-	# Are they already connected?
-	for e in node1.outgoing_edges:
-		if e.end_node == node2:
-			return false
+	# Are they already connected? # NOTE - Bug Brain allows nodes to be
+	# connected multiple times
+#	for e in node1.outgoing_edges:
+#		if e.end_node == node2:
+#			return false
 	# Do they have the right pins? (E.g. 2 input-only nodes can't be connected)
 	if node1.get_output_pin() == null or node2.get_input_pin() == null:
 		return false
@@ -105,7 +120,7 @@ func _connect_nodes(start_node, end_node):
 	if not _can_nodes_connect(start_node, end_node):
 		return
 	var edge = Edge.instance()
-	$Viewport.add_child(edge)
+	add_child(edge)
 	edge.rect_size = Vector2(80, 80)
 	if start_node == end_node:
 		edge.rect_position = (start_node.rect_global_position + \
@@ -121,11 +136,12 @@ func _connect_nodes(start_node, end_node):
 	edge.connect("delete", self, "_on_edge_delete")
 	edges.append(edge)
 	
-func _gui_input(event):
+func _unhandled_input(event):
+#	print(event.as_text())
 	if event is InputEventMouseButton and event.pressed and event.doubleclick \
 		and event.button_index == BUTTON_LEFT:
-		accept_event()
-		_add_node(Global.scr_to_vp(event.position, $Viewport))
+		get_tree().set_input_as_handled()
+		_add_node(Global.scr_to_vp(event.position, get_viewport()))
 	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
 		and event.pressed:
 		drag = true
@@ -133,17 +149,15 @@ func _gui_input(event):
 		and not event.pressed:
 		drag = false
 	elif drag and event is InputEventMouseMotion:
-		$Viewport/Camera2D.position -= event.relative * $Viewport/Camera2D.zoom
-		
-func _input(event):
-	if event is InputEventMouseButton and \
+		camera.position -= event.relative * camera.zoom
+	elif event is InputEventMouseButton and \
 		event.button_index == BUTTON_WHEEL_UP:
 		# TODO use a tween
-		$Viewport/Camera2D.zoom /= zoom_factor
+		camera.zoom /= zoom_factor
 	elif event is InputEventMouseButton and \
 		event.button_index == BUTTON_WHEEL_DOWN:
 		# TODO use a tween
-		$Viewport/Camera2D.zoom *= zoom_factor
+		camera.zoom *= zoom_factor
 
 # TODO
 func _on_node_delete(node):

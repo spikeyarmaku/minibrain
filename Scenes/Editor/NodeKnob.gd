@@ -136,7 +136,7 @@ func _gui_input(event):
 		get_viewport().warp_mouse(knob_mouse_pos)
 		accept_event()
 	elif is_knob_active and event is InputEventMouseMotion:
-		incr_value(event.relative.x * 0.05)
+		incr_value(event.relative.y * -0.05)
 		accept_event()
 
 func _notification(what):

@@ -151,7 +151,7 @@ func _gui_input(event):
 		incr_weight(event.relative.y * -0.05)
 		accept_event()
 	elif is_decay_knob_active and event is InputEventMouseMotion:
-		incr_decay(event.relative.x * -0.05)
+		incr_decay(event.relative.y * 0.05)
 		accept_event()
 
 func _notification(what):
