@@ -20,15 +20,20 @@ func _physics_process(delta):
 	var speed_vec = Vector2(cos(theta), sin(theta)) * speed * 10.0
 #	bot.apply_central_impulse(Vector2(cos(theta), sin(theta)) * speed)
 	bot.move_and_slide(speed_vec)
+	for a in agars:
+		if bot.position.distance_squared_to(a) < 10:
+			agars.erase(a)
+	update()
 
 func _draw():
 	for a in agars:
 		draw_circle(a, 3, Color.from_hsv(0, 0, 0.4))
+	draw_line(bot.position, get_closest_agar()[0], Color.red, 2)
 
 func define_inputs_outputs():
 	return [["distance", "direction"], ["move", "rotate"]]
 
-func provide_inputs():
+func get_closest_agar():
 	var min_dst = measure_distance_to(agars[0])
 	var closest_agar = agars[0]
 	for a in agars:
@@ -36,7 +41,12 @@ func provide_inputs():
 		if dst < min_dst:
 			min_dst = dst
 			closest_agar = a
-	var dir = measure_direction_to(closest_agar)
+	return [closest_agar, min_dst]
+
+func provide_inputs():
+	var closest_agar_dst = get_closest_agar()
+	var min_dst = closest_agar_dst[1]
+	var dir = measure_direction_to(closest_agar_dst[0])
 	return [100 / max(min_dst, 1), dir]
 
 func measure_distance_to(p):
@@ -45,7 +55,13 @@ func measure_distance_to(p):
 func measure_direction_to(p):
 	var d1 = p.angle_to_point(bot.position)
 	var d2 = bot.rotation
-	return d1 - d2
+	var d = d1 - d2
+	while (d < -PI) or (d > PI):
+		if d < -PI:
+			d += 2 * PI
+		else:
+			d -= 2 * PI
+	return d
 
 func receive_outputs(outputs):
 	speed = outputs[0] / 100.0
