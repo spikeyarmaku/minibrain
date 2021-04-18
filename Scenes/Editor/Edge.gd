@@ -5,6 +5,8 @@ signal delete(edge)
 
 const Global = preload("res://Global.gd")
 
+var input_value = 0
+var last_input_value = 0
 var value = 0
 
 var is_hover = false setget set_hover, get_hover
@@ -13,6 +15,8 @@ var start_node : Control
 var end_node : Control
 
 var knob
+
+var changed = true
 
 func set_hover(h):
 	is_hover = h
@@ -29,6 +33,7 @@ func _ready():
 	knob.set_weight(100)
 	knob.set_decay(0)
 	knob.rect_pivot_offset = knob.rect_size / 2
+	knob.connect("changed", self, "_on_knob_changed")
 	set_hover(false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -85,3 +90,24 @@ func destroy():
 	start_node.outgoing_edges.erase(self)
 	end_node.incoming_edges.erase(self)
 	queue_free()
+
+func _on_knob_changed():
+	changed = true
+
+func collect_input():
+	input_value = start_node.value
+
+# Reads the input node's value, and updates its own accordingly
+func update_value():
+	if input_value != last_input_value:
+		changed = true
+		
+	if changed:
+		value = clamp(knob._weight * input_value / 100, -100, 100)
+		last_input_value = input_value
+		changed = false
+	else:
+		if value > 0:
+			value -= clamp(knob._decay, 0, 100)
+		else:
+			value += clamp(knob._decay, -100, 0)

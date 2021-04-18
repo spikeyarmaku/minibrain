@@ -9,6 +9,8 @@ signal hover_end(node)
 
 var node_type = Global.NODE_TYPE.INPUT_OUTPUT_NODE
 
+var input_value = 0
+
 var value = 0
 var incoming_edges = []
 var outgoing_edges = []
@@ -26,12 +28,14 @@ func set_input_only(label):
 	$LeftPinContainer.visible = false
 	is_deletable = false
 	node_type = Global.NODE_TYPE.INPUT_NODE
+	knob._func_type = knob.ACTIVATION_FUNCTION.LINEAR
 	
 func set_output_only(label):
 	knob.label_and_disable(label)
 	$RightPinContainer.visible = false
 	is_deletable = false
 	node_type = Global.NODE_TYPE.OUTPUT_NODE
+	knob._func_type = knob.ACTIVATION_FUNCTION.LINEAR
 
 func get_output_pin():
 	if $RightPinContainer.visible:
@@ -114,3 +118,19 @@ func destroy():
 	for e in outgoing_edge_list:
 		e.destroy()
 	queue_free()
+
+func collect_input():
+	input_value = 0
+	for i in incoming_edges:
+		input_value += i.value
+	input_value = clamp(input_value, -100.0, 100.0)
+
+# Collects values from all incoming edges, and sets its own value accordingly
+func update_value():
+	if knob._func_type == knob.ACTIVATION_FUNCTION.STEP:
+		if input_value > knob._value:
+			value = 100.0
+		else:
+			value = 0.0
+	else:
+		value = clamp(input_value - knob._value, -100.0, 100.0)

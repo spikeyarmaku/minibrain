@@ -5,6 +5,9 @@ extends Node2D
 const Node = preload("res://Scenes/Editor/Node.tscn")
 const Edge = preload("res://Scenes/Editor/Edge.tscn")
 
+var input_nodes = []
+var output_nodes = []
+
 var nodes = []
 var edges = []
 #var perms = [PERM.CREATE_NODE, PERM.CONNECT_NODES, PERM.DELETE_EDGE,
@@ -16,24 +19,15 @@ var connect_type
 
 var drag = false
 
-const zoom_factor = 1.2
-
-var camera
 var viewport
 
 func _ready():
-	camera = $Camera2D
 	viewport = get_viewport()
-	center_camera()
-	set_inputs_outputs(["input1", "input2"], ["output1", "output2", "output3"])
+	Global.get_camera_2d(viewport).position = Vector2(0, 0)
 
-func center_camera():
-	camera.position = Vector2(0,0)
-
-func set_zoom_level(zoom):
-	camera.zoom = Vector2(zoom, zoom)
-
-func set_inputs_outputs(input_strings, output_strings):
+func set_inputs_outputs(strings):
+	var input_strings = strings[0]
+	var output_strings = strings[1]
 	for i in input_strings.size():
 		add_input_node(input_strings[i], Vector2(-100, (i + 1) * 100))
 	for i in output_strings.size():
@@ -43,11 +37,13 @@ func set_inputs_outputs(input_strings, output_strings):
 func add_input_node(label, position):
 	var node = _add_node(position)
 	node.set_input_only(label)
+	input_nodes.append(node)
 	return node
 	
 func add_output_node(label, position):
 	var node = _add_node(position)
 	node.set_output_only(label)
+	output_nodes.append(node)
 	return node
 
 func _process(delta):
@@ -135,37 +131,18 @@ func _connect_nodes(start_node, end_node):
 	end_node.incoming_edges.append(edge)
 	edge.connect("delete", self, "_on_edge_delete")
 	edges.append(edge)
-	
+
 func _unhandled_input(event):
-#	print(event.as_text())
 	if event is InputEventMouseButton and event.pressed and event.doubleclick \
 		and event.button_index == BUTTON_LEFT:
 		get_tree().set_input_as_handled()
 		_add_node(Global.scr_to_vp(event.position, get_viewport()))
-	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
-		and event.pressed:
-		drag = true
-	elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT \
-		and not event.pressed:
-		drag = false
-	elif drag and event is InputEventMouseMotion:
-		camera.position -= event.relative * camera.zoom
-	elif event is InputEventMouseButton and \
-		event.button_index == BUTTON_WHEEL_UP:
-		# TODO use a tween
-		camera.zoom /= zoom_factor
-	elif event is InputEventMouseButton and \
-		event.button_index == BUTTON_WHEEL_DOWN:
-		# TODO use a tween
-		camera.zoom *= zoom_factor
 
-# TODO
 func _on_node_delete(node):
 	if node.is_deletable:
 		nodes.erase(node)
 		node.destroy()
 
-# TODO
 func _on_edge_delete(edge):
 	edges.erase(edge)
 	edge.destroy()
@@ -190,3 +167,19 @@ func _on_node_hover(node):
 func _on_node_hover_end(node):
 	if connect_to == node:
 		connect_to = null
+
+func calculate_outputs(inputs):
+	var outputs = []
+	for i in range(0, input_nodes.size()):
+		input_nodes[i].value = inputs[i]
+	for n in nodes:
+		n.collect_input()
+	for e in edges:
+		e.collect_input()
+	for n in nodes:
+		n.update_value()
+	for e in edges:
+		e.update_value()
+	for n in output_nodes:
+		outputs.append(n.value)
+	return outputs

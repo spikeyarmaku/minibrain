@@ -1,13 +1,37 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/Missions/Agar.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/MovableCamera.tscn" type="PackedScene" id=2]
 
 [node name="Agar" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-position = Vector2( -561, -311 )
-polygon = PoolVector2Array( 423, 118, 102, 247, 207, 517, 576, 563, 646, 358, 439, 303, 574, 174, 937, 214, 722, 500, 935, 576, 1031, 197, 822, 96, 515, 141 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="MovableCamera" parent="." instance=ExtResource( 2 )]
 current = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D"]
+color = Color( 0.309804, 0.309804, 0.309804, 1 )
+polygon = PoolVector2Array( 3.60284, 200.933, -88.439, 185.218, -208.542, 86.4417, -216.4, -16.8247, -147.929, -151.52, -68.2347, -189.684, -0.886963, -194.174, -0.886963, -298.563, -511.607, -299.685, -511.607, 300.832, -0.886963, 301.954 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PoolVector2Array( -2.00946, -195.296, -72.7245, -188.561, -150.174, -149.275, -217.522, -15.7023, -209.665, 87.5642, -89.5615, 185.218, -0.886963, 196.443, -0.886963, 303.077, -513.852, 303.077, -511.607, -299.685, 1.35797, -300.808 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+
+[node name="Polygon2D2" type="Polygon2D" parent="StaticBody2D2"]
+color = Color( 0.309804, 0.309804, 0.309804, 1 )
+polygon = PoolVector2Array( -2.00946, -194.174, 131.563, -154.888, 211.258, -46.0088, 195.544, 66.2374, 99.0121, 175.116, -0.886963, 198.688, -0.886963, 301.954, 513.2, 300.832, 512.078, -300.808, -0.886963, -300.808 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
+polygon = PoolVector2Array( -0.886963, -193.051, 130.441, -152.643, 210.136, -47.1312, 196.666, 65.115, 99.0121, 177.361, -0.886963, 198.688, 0.235474, 303.077, 514.323, 300.832, 512.078, -301.93, -0.886963, -300.808 )
+
+[node name="Bot" type="KinematicBody2D" parent="."]
+rotation = -1.5708
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bot"]
+polygon = PoolVector2Array( -2.2063, -2.5874, 2.75433, -2.68661, 4.34173, -0.206299, 2.85354, 2.77008, -2.30551, 2.96851, -4.38898, 0.0913391 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Bot"]
+polygon = PoolVector2Array( -2.00787, -2.78583, 2.75433, -2.78583, 4.44094, 0.0913391, 2.75433, 2.86929, -2.2063, 2.86929, -4.19055, 0.0913391 )

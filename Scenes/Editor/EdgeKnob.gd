@@ -1,6 +1,8 @@
 tool
 extends Control
 
+signal changed()
+
 var _weight = 100 setget set_weight, get_weight
 var _decay = 0 setget set_decay, get_decay # amount of charge lost per second
 
@@ -30,14 +32,20 @@ func maximize():
 	label_decay.visible = true
 
 func set_weight(val):
-	_weight = min(max(-100, val), 100)
+	var new_weight = min(max(-100, val), 100)
+	if _weight != new_weight:
+		emit_signal("changed")
+	_weight = new_weight
 	update()
 
 func get_weight():
 	return int(round(_weight))
 
 func set_decay(val):
-	_decay = min(max(0, val), 100)
+	var new_decay = min(max(0, val), 100)
+	if _decay != new_decay:
+		emit_signal("changed")
+	_decay = new_decay
 	update()
 	
 func get_decay():
