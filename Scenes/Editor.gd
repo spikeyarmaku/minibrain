@@ -51,7 +51,7 @@ func add_output_node(label, position):
 	output_nodes.append(node)
 	return node
 
-func _process(delta):
+func _process(_delta):
 	if connect_node != null and connect_type != null:
 		update()
 
@@ -81,9 +81,9 @@ func _draw():
 		else:
 			draw_line(start_pin_pos, end_pin_pos, Color.from_hsv(0, 0, 0.4), 8)
 
-func get_pin_position(node, connect_type):
+func get_pin_position(node, conn_type):
 	var pin
-	if connect_type == Global.CONNECT_TYPE.INPUT_OUTPUT:
+	if conn_type == Global.CONNECT_TYPE.INPUT_OUTPUT:
 		pin = node.get_input_pin()
 	else:
 		pin = node.get_output_pin()

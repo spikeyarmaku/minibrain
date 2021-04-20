@@ -153,13 +153,13 @@ func _draw_func_type():
 	points.append(center + Vector2(5 * radius / 8, -radius / 4))
 	draw_polyline(points, color, 5)
 
-func draw_circle_sector(center, r, angle_from, angle_to, color):
+func draw_circle_sector(circle_center, r, angle_from, angle_to, color):
 	var nb_points = 32
 	var points_arc = PoolVector2Array()
 	for i in range(nb_points + 1):
 		var angle_point = angle_from + i * (angle_to-angle_from) / nb_points
-		points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * r)
-	points_arc.push_back(center)
+		points_arc.push_back(circle_center + Vector2(cos(angle_point), sin(angle_point)) * r)
+	points_arc.push_back(circle_center)
 	draw_colored_polygon(points_arc, color)
 
 func _gui_input(event):

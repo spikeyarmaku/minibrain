@@ -234,13 +234,13 @@ func update_value():
 		changed = true
 		
 	if changed:
-		output_value = clamp(_weight * _input_value / 100, -100, 100)
+		output_value = clamp(get_weight() * get_input_value() / 100, -100, 100)
 		_prev_input_value = _input_value
 	else:
 		if output_value > 0:
-			output_value -= clamp(get_decay(), 0, 100)
+			output_value = clamp(output_value - get_decay(), 0, 100)
 		else:
-			output_value += clamp(get_decay(), -100, 0)
+			output_value = clamp(output_value + get_decay(), -100, 0)
 	var output_changed = output_value != _prev_output_value
 	_prev_output_value = output_value
 	

@@ -72,7 +72,7 @@ func _ready():
 var mouse_in = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	# workaround for https://github.com/godotengine/godot/issues/20881
 	var prev_mouse_in = mouse_in
 	mouse_in = get_rect().has_point(get_global_mouse_position())

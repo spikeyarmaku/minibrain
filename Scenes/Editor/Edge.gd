@@ -30,8 +30,8 @@ func _ready():
 	set_hover(false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	update()
+#func _process(delta):
+#	update()
 
 func _draw():
 	var left_pos = rect_size / 2 - Vector2(rect_size.x / 2, 0) * knob.rect_scale

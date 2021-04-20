@@ -25,12 +25,14 @@ func _on_node_gui_input(event, node_name):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
 		and event.pressed:
 		if node_name == menu_points[0]: # New game
-			get_tree().change_scene("res://Scenes/Game.tscn")
+			var err_code = get_tree().change_scene("res://Scenes/Game.tscn")
+			if err_code != 0:
+				print("Error in Main menu: ", err_code)
 		elif node_name == menu_points[1]: # Quit
 			get_tree().quit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if editor.connect_node == null:
 		editor.connect_node = main_menu_node
 		editor.connect_type = Global.CONNECT_TYPE.OUTPUT_INPUT
