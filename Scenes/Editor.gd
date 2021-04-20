@@ -97,11 +97,11 @@ func _add_node(position):
 	add_child(node)
 	node.rect_size = Vector2(80, 80)
 	node.set_position(position - node.rect_size / 2)
-	node.connect("delete", self, "_on_node_delete")
-	node.connect("connect_request", self, "_on_connect_request")
+	node.connect("delete", self, "_on_node_delete", [node])
+	node.connect("connect_request", self, "_on_connect_request", [node])
 	node.connect("connect_request_end", self, "_on_connect_request_end")
-	node.connect("hover", self, "_on_node_hover")
-	node.connect("hover_end", self, "_on_node_hover_end")
+	node.connect("hover", self, "_on_node_hover", [node])
+	node.connect("hover_end", self, "_on_node_hover_end", [node])
 	nodes.append(node)
 	return node
 
@@ -134,7 +134,7 @@ func _connect_nodes(start_node, end_node):
 	edge.end_node = end_node
 	start_node.outgoing_edges.append(edge)
 	end_node.incoming_edges.append(edge)
-	edge.connect("delete", self, "_on_edge_delete")
+	edge.connect("delete", self, "_on_edge_delete", [edge])
 	edges.append(edge)
 
 func _unhandled_input(event):
@@ -152,7 +152,7 @@ func _on_edge_delete(edge):
 	edges.erase(edge)
 	edge.destroy()
 
-func _on_connect_request(conn_node, conn_type):
+func _on_connect_request(conn_type, conn_node):
 	connect_node = conn_node
 	connect_type = conn_type
 
@@ -176,7 +176,7 @@ func _on_node_hover_end(node):
 func calculate_outputs(inputs):
 	var outputs = []
 	for i in range(0, input_nodes.size()):
-		input_nodes[i].value = inputs[i]
+		input_nodes[i].set_input(inputs[i])
 	for n in nodes:
 		n.collect_input()
 	for e in edges:
@@ -186,5 +186,5 @@ func calculate_outputs(inputs):
 	for e in edges:
 		e.update_value()
 	for n in output_nodes:
-		outputs.append(n.value)
+		outputs.append(n.get_output())
 	return outputs

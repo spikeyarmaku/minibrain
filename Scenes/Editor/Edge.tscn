@@ -46,3 +46,5 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="EdgeKnob" parent="." instance=ExtResource( 1 )]
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 40, 40 )

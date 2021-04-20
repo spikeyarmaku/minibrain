@@ -1,13 +1,21 @@
 tool
 extends Control
 
-signal changed()
-
+# Synapse logic
+var _input_value = 0 setget set_input_value, get_input_value
+var output_value = 0
+var _prev_input_value = 0
+var _prev_output_value = 0
 var _weight = 100 setget set_weight, get_weight
 var _decay = 0 setget set_decay, get_decay # amount of charge lost per second
+var changed = false
 
 var _color_node : Color = Color.from_hsv(0, 0, 0.2)
 var _color_knob : Color = Color.from_hsv(0, 0, 0.4)
+var _color_knob_input_positive : Color = Color(0, 0.4, 0)
+var _color_knob_input_negative : Color = Color(0.4, 0, 0)
+var _color_knob_output_positive : Color = Color(0, 0.4, 0)
+var _color_knob_output_negative : Color = Color(0.4, 0, 0)
 var _color_outline : Color = Color.from_hsv(0, 0, 0.15)
 const _outline_width = 2
 
@@ -21,6 +29,25 @@ var knob_mouse_pos
 var radius = 10
 var center = Vector2(0,0)
 
+# Hides user-set weight lables, and shows actual values
+var simulation_mode = false setget set_simulation_mode, get_simulation_mode
+
+func set_input_value(i):
+	if _input_value != i:
+		_input_value = i
+		update()
+	
+func get_input_value():
+	return _input_value
+
+func set_simulation_mode(s):
+	label_text.visible = s
+	label_weight.visible = not s
+	label_decay.visible = not s
+
+func get_simulation_mode():
+	return simulation_mode
+
 func minimize():
 	rect_scale = Vector2(0.5, 0.5)
 	label_weight.visible = false
@@ -33,8 +60,8 @@ func maximize():
 
 func set_weight(val):
 	var new_weight = min(max(-100, val), 100)
-	if _weight != new_weight:
-		emit_signal("changed")
+	if get_weight() != int(round(new_weight)):
+		changed = true
 	_weight = new_weight
 	update()
 
@@ -43,8 +70,8 @@ func get_weight():
 
 func set_decay(val):
 	var new_decay = min(max(0, val), 100)
-	if _decay != new_decay:
-		emit_signal("changed")
+	if get_decay() != int(round(new_decay)):
+		changed = true
 	_decay = new_decay
 	update()
 	
@@ -101,6 +128,21 @@ func _draw_body():
 	draw_rect(rect, _color_outline, false, _outline_width)
 
 func _draw_knob():
+	var input_first = abs(get_input_value()) > abs(get_weight())
+	var output_first = get_decay() > 0
+	if input_first:
+		draw_input()
+	if output_first:
+		draw_output()
+	draw_knob_indicator()
+	if not input_first:
+		draw_input()
+	if not output_first:
+		draw_output()
+	draw_line(Vector2(0, -radius) + center, Vector2(0, radius) + center, \
+			 _color_outline, 4)
+
+func draw_knob_indicator():
 	var left_y = radius * get_weight() / 100
 	var right_x = radius * (1 - (get_decay() - 1.0) / 100)
 	var points = [ Vector2(-radius, 0) + center
@@ -112,8 +154,28 @@ func _draw_knob():
 	else:
 		points.append(center + Vector2(right_x, 0))
 	draw_colored_polygon(PoolVector2Array(points), _color_knob)
-	draw_line(Vector2(0, -radius) + center, Vector2(0, radius) + center, \
-			 _color_outline, 4)
+
+func draw_input():
+	var height = get_input_value() / 100
+	var color = _color_knob_input_positive
+	if height < 0:
+		color = _color_knob_input_negative
+	var points = [ Vector2(-radius, 0) + center
+				 , center
+				 , Vector2(0, -height * radius) + center
+				 , Vector2(-radius, -height * radius) + center ]
+	draw_colored_polygon(PoolVector2Array(points), color)
+	
+func draw_output():
+	var height = output_value / 100
+	var color = _color_knob_output_positive
+	if output_value < 0:
+		color = _color_knob_output_negative
+	var points = [ center
+				 , Vector2(radius, 0) + center
+				 , Vector2(radius, -height * radius) + center
+				 , Vector2(0, -height * radius) + center ]
+	draw_colored_polygon(PoolVector2Array(points), color)
 
 func _gui_input(event):
 	if is_disabled:
@@ -165,3 +227,24 @@ func _gui_input(event):
 func _notification(what):
 	if what == NOTIFICATION_RESIZED:
 		recalculate_size()
+
+# Reads the input node's value, and updates its own accordingly
+func update_value():
+	if _input_value != _prev_input_value:
+		changed = true
+		
+	if changed:
+		output_value = clamp(_weight * _input_value / 100, -100, 100)
+		_prev_input_value = _input_value
+	else:
+		if output_value > 0:
+			output_value -= clamp(get_decay(), 0, 100)
+		else:
+			output_value += clamp(get_decay(), -100, 0)
+	var output_changed = output_value != _prev_output_value
+	_prev_output_value = output_value
+	
+	if changed or output_changed:
+		update()
+	
+	changed = false

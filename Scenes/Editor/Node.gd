@@ -1,17 +1,14 @@
 tool
 extends Control
 
-signal delete(node)
-signal connect_request(node, CONNECT_TYPE)
+signal delete()
+signal connect_request(CONNECT_TYPE)
 signal connect_request_end()
-signal hover(node)
-signal hover_end(node)
+signal hover()
+signal hover_end()
 
 var node_type = Global.NODE_TYPE.INPUT_OUTPUT_NODE
 
-var input_value = 0
-
-var value = 0
 var incoming_edges = []
 var outgoing_edges = []
 
@@ -29,6 +26,8 @@ func set_input_only(label):
 	is_deletable = false
 	node_type = Global.NODE_TYPE.INPUT_NODE
 	knob._func_type = knob.ACTIVATION_FUNCTION.LINEAR
+	knob.set_bias(0)
+	knob.node_type = node_type
 	
 func set_output_only(label):
 	knob.label_and_disable(label)
@@ -36,6 +35,8 @@ func set_output_only(label):
 	is_deletable = false
 	node_type = Global.NODE_TYPE.OUTPUT_NODE
 	knob._func_type = knob.ACTIVATION_FUNCTION.LINEAR
+	knob.set_bias(0)
+	knob.node_type = node_type
 
 func get_output_pin():
 	if $RightPinContainer.visible:
@@ -59,6 +60,8 @@ func _ready():
 	knob = $KnobContainer/NodeKnob
 	var lpin = $LeftPinContainer/Pin
 	var rpin = $RightPinContainer/Pin
+	knob.set_bias(50)
+	knob.node_type = node_type
 	lpin.init(Global.PIN_TYPE.INPUT)
 	rpin.init(Global.PIN_TYPE.OUTPUT)
 	lpin.connect("connect_request", self, "_on_input_connect_request")
@@ -74,14 +77,14 @@ func _process(delta):
 	var prev_mouse_in = mouse_in
 	mouse_in = get_rect().has_point(get_global_mouse_position())
 	if not prev_mouse_in and mouse_in:
-		emit_signal("hover", self)
+		emit_signal("hover")
 	elif prev_mouse_in and not mouse_in:
-		emit_signal("hover_end", self)
+		emit_signal("hover_end")
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
 		event.doubleclick and event.button_index == BUTTON_LEFT:
-		emit_signal("delete", self)
+		emit_signal("delete")
 		accept_event()
 	elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		is_dragged = event.pressed
@@ -95,16 +98,16 @@ func _gui_input(event):
 #func _notification(what):
 #	if what == NOTIFICATION_MOUSE_ENTER:
 #		set_hover(true)
-#		emit_signal("hover", self)
+#		emit_signal("hover")
 #	elif what == NOTIFICATION_MOUSE_EXIT:
 #		set_hover(false)
-#		emit_signal("hover_end", self)
+#		emit_signal("hover_end")
 
 func _on_output_connect_request():
-	emit_signal("connect_request", self, Global.CONNECT_TYPE.OUTPUT_INPUT)
+	emit_signal("connect_request", Global.CONNECT_TYPE.OUTPUT_INPUT)
 
 func _on_input_connect_request():
-	emit_signal("connect_request", self, Global.CONNECT_TYPE.INPUT_OUTPUT)
+	emit_signal("connect_request", Global.CONNECT_TYPE.INPUT_OUTPUT)
 
 func _on_connect_request_end():
 	emit_signal("connect_request_end")
@@ -113,24 +116,25 @@ func destroy():
 	# Destroy edges
 	var incoming_edge_list = incoming_edges.duplicate()
 	for e in incoming_edge_list:
-		e.destroy()
+		e.emit_signal("delete")
 	var outgoing_edge_list = outgoing_edges.duplicate()
 	for e in outgoing_edge_list:
-		e.destroy()
+		e.emit_signal("delete")
 	queue_free()
 
 func collect_input():
-	input_value = 0
+	if node_type == Global.NODE_TYPE.INPUT_NODE:
+		return
+	var input_value = 0
 	for i in incoming_edges:
-		input_value += i.value
-	input_value = clamp(input_value, -100.0, 100.0)
+		input_value += i.get_output()
+	knob.set_input_value(clamp(input_value, -100.0, 100.0))
 
-# Collects values from all incoming edges, and sets its own value accordingly
 func update_value():
-	if knob._func_type == knob.ACTIVATION_FUNCTION.STEP:
-		if input_value > knob._value:
-			value = 100.0
-		else:
-			value = 0.0
-	else:
-		value = clamp(input_value - knob._value, -100.0, 100.0)
+	knob.update_value()
+
+func get_output():
+	return knob.output_value
+
+func set_input(i):
+	knob.set_input_value(i)

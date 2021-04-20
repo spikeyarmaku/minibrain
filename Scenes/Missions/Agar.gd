@@ -4,11 +4,14 @@ var agars = []
 var bot
 var speed = 0
 var turn = 0
+var rng
 
 const turn_vel = PI # Radians per second
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	rng = RandomNumberGenerator.new()
+	rng.set_seed(456783)
 	bot = $Bot
 	var count = 20
 	for i in range(count):
@@ -28,10 +31,10 @@ func _physics_process(delta):
 func _draw():
 	for a in agars:
 		draw_circle(a, 3, Color.from_hsv(0, 0, 0.4))
-	draw_line(bot.position, get_closest_agar()[0], Color.red, 2)
+	draw_line(bot.position, get_closest_agar(), Color.red, 2)
 
 func define_inputs_outputs():
-	return [["distance", "direction"], ["move", "rotate"]]
+	return [["direction"], ["move", "rotate"]]
 
 func get_closest_agar():
 	var min_dst = measure_distance_to(agars[0])
@@ -41,13 +44,12 @@ func get_closest_agar():
 		if dst < min_dst:
 			min_dst = dst
 			closest_agar = a
-	return [closest_agar, min_dst]
+	return closest_agar
 
 func provide_inputs():
-	var closest_agar_dst = get_closest_agar()
-	var min_dst = closest_agar_dst[1]
-	var dir = measure_direction_to(closest_agar_dst[0])
-	return [100 / max(min_dst, 1), dir]
+	var closest_agar = get_closest_agar()
+	var dir = measure_direction_to(closest_agar)
+	return [dir * 100 / PI]
 
 func measure_distance_to(p):
 	return (bot.position - p).length()
@@ -69,7 +71,7 @@ func receive_outputs(outputs):
 
 func generate_agar(i, count):
 	var angle = i * 2 * PI / count
-	var dst = 50 + randf() * 100
+	var dst = 50 + rng.randf() * 100
 	var pos = Vector2(cos(angle) * dst, sin(angle) * dst)
 	agars.append(pos)
 

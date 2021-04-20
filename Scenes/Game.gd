@@ -1,9 +1,15 @@
+# TODO
+# - reset brain state
+# - reset world state
+
 extends Control
 
 var big_vp
 var small_vp
 var level
 var editor
+
+var is_running = true # TODO false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,9 +22,10 @@ func _ready():
 	editor.set_inputs_outputs(level.define_inputs_outputs())
 
 func _process(_delta):
-	var inputs = level.provide_inputs()
-	var outputs = editor.calculate_outputs(inputs)
-	level.receive_outputs(outputs)
+	if is_running:
+		var inputs = level.provide_inputs()
+		var outputs = editor.calculate_outputs(inputs)
+		level.receive_outputs(outputs)
 
 func swap_viewports():
 	var big_vp_viewport = big_vp.get_child(0)
