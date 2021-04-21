@@ -71,12 +71,15 @@ func _gui_input(event):
 		is_dragged = event.pressed
 	elif is_dragged and event is InputEventMouseMotion:
 		rect_position += event.relative
+		update()
 
 func _notification(what):
 	if what == NOTIFICATION_MOUSE_ENTER:
 		set_hover(true)
+		update()
 	elif what == NOTIFICATION_MOUSE_EXIT:
 		set_hover(false)
+		update()
 
 func destroy():
 	# Disconnect from nodes

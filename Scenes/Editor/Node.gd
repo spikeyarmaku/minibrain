@@ -92,6 +92,10 @@ func _gui_input(event):
 	elif is_dragged and event is InputEventMouseMotion:
 		rect_position += event.relative
 		accept_event()
+		for i in incoming_edges:
+			i.update()
+		for o in outgoing_edges:
+			o.update()
 
 # This should work, but due to issue #20881 in godot it doesn't.
 # See _process for workaround

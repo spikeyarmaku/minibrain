@@ -17,7 +17,7 @@ func _ready():
 	for i in range(count):
 		generate_agar(i, count)
 
-func _physics_process(delta):
+func step(delta):
 	bot.rotation += turn_vel * turn * delta
 	var theta = bot.rotation
 	var speed_vec = Vector2(cos(theta), sin(theta)) * speed * 10.0
@@ -74,4 +74,3 @@ func generate_agar(i, count):
 	var dst = 50 + rng.randf() * 100
 	var pos = Vector2(cos(angle) * dst, sin(angle) * dst)
 	agars.append(pos)
-
