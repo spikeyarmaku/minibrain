@@ -218,10 +218,12 @@ func _gui_input(event):
 		get_viewport().warp_mouse(knob_mouse_pos)
 		accept_event()
 	elif is_weight_knob_active and event is InputEventMouseMotion:
-		incr_weight(event.relative.y * -0.05)
+		var zoom = Global.get_camera_2d(get_viewport()).zoom.x
+		incr_weight(event.relative.y * -0.05 / zoom)
 		accept_event()
 	elif is_decay_knob_active and event is InputEventMouseMotion:
-		incr_decay(event.relative.y * 0.05)
+		var zoom = Global.get_camera_2d(get_viewport()).zoom.x
+		incr_decay(event.relative.y * 0.05 / zoom)
 		accept_event()
 
 func _notification(what):

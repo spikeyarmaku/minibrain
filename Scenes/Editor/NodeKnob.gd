@@ -180,7 +180,8 @@ func _gui_input(event):
 		get_viewport().warp_mouse(knob_mouse_pos)
 		accept_event()
 	elif is_knob_active and event is InputEventMouseMotion:
-		incr_bias(event.relative.y * -0.05)
+		var zoom = Global.get_camera_2d(get_viewport()).zoom.x
+		incr_bias(event.relative.y * -0.05 / zoom)
 		accept_event()
 
 func _notification(what):
