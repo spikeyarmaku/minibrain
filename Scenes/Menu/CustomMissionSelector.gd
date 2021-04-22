@@ -5,7 +5,6 @@ extends Control
 
 var editor
 var menu_title_node
-var quit_node
 
 var active_node = ""
 

@@ -5,10 +5,18 @@ var menu_title_node
 
 var active_node = ""
 
-var menu_points = ["Campaign", "Custom", "Go\nback"]
+var game = preload("res://Scenes/Game.tscn")
+var mission_agar = preload("res://Scenes/Missions/Agar.tscn")
+
+var missions = {"Agar" : mission_agar}
+
+var menu_points = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	for m in missions:
+		menu_points.append(m)
+	menu_points.append("Go\nback")
 	editor = $Editor
 	var camera = Global.get_camera_2d(get_viewport())
 	camera.zoom *= 0.7
@@ -21,13 +29,14 @@ func _ready():
 func _on_node_gui_input(event, node_name):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
 		and event.pressed:
-		if node_name == menu_points[0]: # Campaign
+		if node_name == menu_points[menu_points.size() - 1]: # Go back
 # warning-ignore:return_value_discarded
-			get_tree().change_scene("res://Scenes/Menu/CampaignMissionSelector.tscn")
-		elif node_name == menu_points[1]: # Custom
-			get_tree().change_scene("res://Scenes/Menu/CustomMissionSelector.tscn")
-		else: # Go back
-			get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+			get_tree().change_scene("res://Scenes/Menu/MissionSelector.tscn")
+		else:
+			var game_instance = game.instance()
+			game_instance.set_level(missions[node_name])
+			get_tree().get_root().add_child(game_instance)
+			queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

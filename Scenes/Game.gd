@@ -1,10 +1,9 @@
 # TODO
 # - reset brain state
-# - reset world state
 
 extends Control
 
-const test_level = preload("res://Scenes/Missions/Agar.tscn")
+var level_blueprint
 
 var big_vp : Viewport
 var small_vp : Viewport
@@ -17,13 +16,16 @@ var simulation_delta = 0
 
 var is_running = false
 
+func set_level(blueprint):
+	level_blueprint = blueprint
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	big_vp = $BigViewport/Viewport
 	small_vp = $SmallViewport/Viewport
 	editor = $BigViewport/Viewport/Editor
 	# --
-	load_level(test_level)
+	load_level(level_blueprint)
 	editor.set_inputs_outputs(level.define_inputs_outputs())
 	# --
 	btn_exit = $ButtonExit
@@ -51,7 +53,7 @@ func _on_reset():
 	else:
 		level.get_parent().remove_child(level)
 		level.queue_free()
-		load_level(test_level)
+		load_level(level_blueprint)
 
 func _on_play():
 	is_running = true
@@ -89,6 +91,7 @@ func swap_viewports():
 	Global.get_camera_2d(small_vp).zoom *= 4
 
 func _on_exit_pressed():
+	queue_free()
 	get_tree().change_scene("res://Scenes/Menu/Main.tscn")
 
 func _on_SmallViewport_gui_input(event):
@@ -100,4 +103,3 @@ func _on_SmallViewport_gui_input(event):
 # Also mentioned in https://github.com/godotengine/godot/issues/17326
 func _on_BigViewport_gui_input(event):
 	$BigViewport/Viewport.unhandled_input(event)
-
