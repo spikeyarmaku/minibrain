@@ -6,8 +6,8 @@ extends Control
 
 const test_level = preload("res://Scenes/Missions/Agar.tscn")
 
-var big_vp
-var small_vp
+var big_vp : Viewport
+var small_vp : Viewport
 var level
 var editor
 var control_panel
@@ -23,7 +23,6 @@ func _ready():
 	editor = $BigViewport/Viewport/Editor
 	# --
 	load_level(test_level)
-	Global.get_camera_2d(small_vp).zoom *= 4
 	editor.set_inputs_outputs(level.define_inputs_outputs())
 	# --
 	control_panel = $ControlPanel
@@ -38,6 +37,7 @@ func load_level(level_blueprint):
 	level = level_blueprint.instance()
 	if editor.get_parent() == big_vp:
 		small_vp.add_child(level)
+		Global.get_camera_2d(small_vp).zoom *= 4
 	else:
 		big_vp.add_child(level)
 
@@ -45,6 +45,7 @@ func _on_reset():
 	if level.has_method("reset"):
 		level.reset()
 	else:
+		level.get_parent().remove_child(level)
 		level.queue_free()
 		load_level(test_level)
 
