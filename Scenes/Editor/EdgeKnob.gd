@@ -229,7 +229,7 @@ func _notification(what):
 		recalculate_size()
 
 # Reads the input node's value, and updates its own accordingly
-func update_value():
+func update_value(delta):
 	if _input_value != _prev_input_value:
 		changed = true
 		
@@ -238,9 +238,9 @@ func update_value():
 		_prev_input_value = _input_value
 	else:
 		if output_value > 0:
-			output_value = clamp(output_value - get_decay(), 0, 100)
+			output_value = clamp(output_value - get_decay() * delta, 0, 100)
 		else:
-			output_value = clamp(output_value + get_decay(), -100, 0)
+			output_value = clamp(output_value + get_decay() * delta, -100, 0)
 	var output_changed = output_value != _prev_output_value
 	_prev_output_value = output_value
 	

@@ -94,8 +94,8 @@ func collect_input():
 	knob.set_input_value(clamp(input_value, -100.0, 100.0))
 
 # Reads the input node's value, and updates its own accordingly
-func update_value():
-	knob.update_value()
+func update_value(delta):
+	knob.update_value(delta)
 
 func get_output():
 	return knob.output_value

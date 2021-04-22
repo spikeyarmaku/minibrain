@@ -59,18 +59,15 @@ func _on_pause():
 func _on_step():
 	step()
 
-func _process(_delta):
-	if is_running:
-		step()
-
 func _physics_process(delta):
 	simulation_delta = delta
 	if is_running:
+		step()
 		level.step(simulation_delta)
 
 func step():
 	var inputs = level.provide_inputs()
-	var outputs = editor.calculate_outputs(inputs)
+	var outputs = editor.calculate_outputs(inputs, simulation_delta)
 	level.receive_outputs(outputs)
 	level.step(simulation_delta)
 

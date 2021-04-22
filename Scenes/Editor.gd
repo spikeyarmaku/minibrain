@@ -173,7 +173,7 @@ func _on_node_hover_end(node):
 	if connect_to == node:
 		connect_to = null
 
-func calculate_outputs(inputs):
+func calculate_outputs(inputs, delta):
 	var outputs = []
 	for i in range(0, input_nodes.size()):
 		input_nodes[i].set_input(inputs[i])
@@ -184,7 +184,7 @@ func calculate_outputs(inputs):
 	for n in nodes:
 		n.update_value()
 	for e in edges:
-		e.update_value()
+		e.update_value(delta)
 	for n in output_nodes:
 		outputs.append(n.get_output())
 	return outputs
