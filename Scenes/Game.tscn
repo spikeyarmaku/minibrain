@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/Editor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://data/icons/button_exit.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/Game.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/ControlPanel.gd" type="Script" id=4]
 [ext_resource path="res://data/icons/button_step.png" type="Texture" id=5]
@@ -23,6 +24,19 @@ shader_param/btn_color = Plane( 1, 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 1 )
+shader_param/btn_color = Plane( 1, 1, 1, 1 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+uniform vec4 btn_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV) * btn_color;
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
 shader_param/btn_color = Plane( 1, 1, 1, 1 )
 
 [node name="Game" type="Control"]
@@ -65,9 +79,10 @@ render_target_update_mode = 3
 gui_disable_input = true
 
 [node name="ControlPanel" type="HBoxContainer" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -240.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -120.0
+margin_right = 120.0
 margin_bottom = 60.0
 script = ExtResource( 4 )
 __meta__ = {
@@ -118,6 +133,18 @@ margin_bottom = 60.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = ExtResource( 5 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonExit" type="TextureButton" parent="."]
+material = SubResource( 5 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -60.0
+margin_bottom = 60.0
+texture_normal = ExtResource( 2 )
 expand = true
 __meta__ = {
 "_edit_use_anchors_": false

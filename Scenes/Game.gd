@@ -11,6 +11,7 @@ var small_vp : Viewport
 var level
 var editor
 var control_panel
+var btn_exit : TextureButton
 
 var simulation_delta = 0
 
@@ -25,6 +26,9 @@ func _ready():
 	load_level(test_level)
 	editor.set_inputs_outputs(level.define_inputs_outputs())
 	# --
+	btn_exit = $ButtonExit
+	btn_exit.material.set_shader_param("btn_color", Color(1, 0.25, 0.25, 1))
+	btn_exit.connect("pressed", self, "_on_exit_pressed")
 	control_panel = $ControlPanel
 	control_panel.connect("reset", self, "_on_reset")
 	control_panel.connect("play", self, "_on_play")
@@ -83,6 +87,9 @@ func swap_viewports():
 	small_vp_viewport.set_owner(big_vp)
 	Global.get_camera_2d(big_vp).zoom *= 0.25
 	Global.get_camera_2d(small_vp).zoom *= 4
+
+func _on_exit_pressed():
+	get_tree().change_scene("res://Scenes/Menu/Main.tscn")
 
 func _on_SmallViewport_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
