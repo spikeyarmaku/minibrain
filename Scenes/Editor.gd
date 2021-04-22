@@ -188,3 +188,4 @@ func calculate_outputs(inputs):
 	for n in output_nodes:
 		outputs.append(n.get_output())
 	return outputs
+

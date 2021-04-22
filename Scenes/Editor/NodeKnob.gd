@@ -10,9 +10,6 @@ var _bias = 0 setget set_bias, get_bias
 var output_value = 0 # The current output value of the node
 var _prev_output_value = 0
 
-# Hides user-set bias lables, and shows actual values
-var simulation_mode = false setget set_simulation_mode, get_simulation_mode
-
 # Display
 var node_type
 var _color_node : Color = Color.from_hsv(0, 0, 0.2)
@@ -30,13 +27,6 @@ var is_knob_active = false
 var knob_mouse_pos
 var radius = 10
 var center = Vector2(0,0)
-
-func set_simulation_mode(s):
-	label_text.visible = s
-	label_bias.visible = not s
-
-func get_simulation_mode():
-	return simulation_mode
 
 # For input and output nodes
 func label_and_disable(label):

@@ -17,11 +17,11 @@ void fragment() {
 	COLOR = texture(TEXTURE, UV) * btn_color;
 }"
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/btn_color = Plane( 1, 1, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 1 )
 shader_param/btn_color = Plane( 1, 1, 1, 1 )
 
@@ -86,7 +86,7 @@ __meta__ = {
 }
 
 [node name="ButtonPlay" type="TextureButton" parent="ControlPanel"]
-material = SubResource( 4 )
+material = SubResource( 2 )
 margin_left = 61.0
 margin_right = 118.0
 margin_bottom = 60.0
@@ -99,7 +99,7 @@ __meta__ = {
 }
 
 [node name="ButtonPause" type="TextureButton" parent="ControlPanel"]
-material = SubResource( 5 )
+material = SubResource( 3 )
 margin_left = 122.0
 margin_right = 179.0
 margin_bottom = 60.0
@@ -122,5 +122,6 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="gui_input" from="BigViewport" to="." method="_on_BigViewport_gui_input"]
 [connection signal="gui_input" from="SmallViewport" to="." method="_on_SmallViewport_gui_input"]
