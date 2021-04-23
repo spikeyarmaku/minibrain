@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/Editor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://data/icons/button_exit.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://data/icons/button_reset.png" type="Texture" id=6]
 [ext_resource path="res://data/icons/button_play.png" type="Texture" id=7]
 [ext_resource path="res://data/icons/button_pause.png" type="Texture" id=8]
+[ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=9]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -39,6 +40,22 @@ void fragment() {
 shader = SubResource( 4 )
 shader_param/btn_color = Plane( 1, 1, 1, 1 )
 
+[sub_resource type="DynamicFont" id=6]
+size = 72
+font_data = ExtResource( 9 )
+
+[sub_resource type="Theme" id=7]
+default_font = SubResource( 6 )
+Label/colors/font_color = Color( 1, 1, 1, 1 )
+Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = null
+Label/styles/normal = null
+
 [node name="Game" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -58,6 +75,7 @@ __meta__ = {
 [node name="Viewport" type="Viewport" parent="BigViewport"]
 size = Vector2( 1024, 600 )
 handle_input_locally = false
+usage = 0
 render_target_update_mode = 3
 
 [node name="Editor" parent="BigViewport/Viewport" instance=ExtResource( 1 )]
@@ -75,6 +93,7 @@ __meta__ = {
 [node name="Viewport" type="Viewport" parent="SmallViewport"]
 size = Vector2( 256, 150 )
 handle_input_locally = false
+usage = 0
 render_target_update_mode = 3
 gui_disable_input = true
 
@@ -149,6 +168,31 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+margin_left = 505.0
+margin_top = 293.0
+margin_right = 519.0
+margin_bottom = 307.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 807.0
+margin_bottom = 107.0
+rect_min_size = Vector2( 800, 100 )
+theme = SubResource( 7 )
+bbcode_enabled = true
+bbcode_text = "[center]SUCCESS[/center]"
+text = "SUCCESS"
 
 [connection signal="gui_input" from="BigViewport" to="." method="_on_BigViewport_gui_input"]
 [connection signal="gui_input" from="SmallViewport" to="." method="_on_SmallViewport_gui_input"]

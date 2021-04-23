@@ -15,9 +15,9 @@ var btn_exit : TextureButton
 var simulation_delta = 0
 
 var is_running = false
+var is_completed = false
 
-func set_level(blueprint):
-	level_blueprint = blueprint
+var movable_camera = preload("res://Scenes/MovableCamera.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -25,6 +25,7 @@ func _ready():
 	small_vp = $SmallViewport/Viewport
 	editor = $BigViewport/Viewport/Editor
 	# --
+	level_blueprint = Global.missions[Global.current_mission][1]
 	load_level(level_blueprint)
 	editor.set_inputs_outputs(level.define_inputs_outputs())
 	# --
@@ -41,11 +42,31 @@ func _ready():
 
 func load_level(level_blueprint):
 	level = level_blueprint.instance()
+	var camera = movable_camera.instance()
+	level.add_child(camera)
+	camera.current = true
+	if not level.is_single_screen:
+		camera.can_move = true
+	level.connect("completed", self, "_on_level_completed")
 	if editor.get_parent() == big_vp:
 		small_vp.add_child(level)
-		Global.get_camera_2d(small_vp).zoom *= 4
+		camera.zoom *= 4
 	else:
 		big_vp.add_child(level)
+
+func _on_level_completed(success):
+	is_completed = true
+	if success:
+		Global.current_mission += 1
+	else:
+		$CenterContainer/PanelContainer/RichTextLabel.bbcode_text = \
+			"[center]FAILED[/center]"
+	$CenterContainer.visible = true
+	var timer = get_tree().create_timer(3)
+	timer.connect("timeout", self, "_on_timer_timeout")
+	
+func _on_timer_timeout():
+	get_tree().change_scene("res://Scenes/Game.tscn")
 
 func _on_reset():
 	if level.has_method("reset"):
@@ -68,7 +89,7 @@ func _on_step():
 
 func _physics_process(delta):
 	simulation_delta = delta
-	if is_running:
+	if is_running and not is_completed:
 		step()
 		level.step(simulation_delta)
 

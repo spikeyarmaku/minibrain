@@ -1,5 +1,14 @@
 extends Node
 
+# Mission definitions
+# var mission_agar = preload("res://Scenes/Missions/Agar.tscn")
+var mission1 = preload("res://Scenes/Missions/Mission1.tscn")
+var mission2 = null
+
+var missions = [["Lamp", mission1], ["Two\nLamps", mission2]]
+var current_mission = 0
+# End of mission definitions
+
 enum PIN_TYPE {INPUT, OUTPUT}
 enum CONNECT_TYPE {INPUT_OUTPUT, OUTPUT_INPUT}
 enum KNOB_TYPE {NODE_KNOB, EDGE_KNOB}

@@ -23,7 +23,9 @@ var viewport
 
 func _ready():
 	viewport = get_viewport()
-	Global.get_camera_2d(viewport).position = Vector2(0, 0)
+	var camera = Global.get_camera_2d(viewport)
+	camera.position = Vector2(0, 0)
+	camera.can_move = true
 
 func set_inputs_outputs(strings):
 	var input_strings = strings[0]

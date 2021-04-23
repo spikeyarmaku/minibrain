@@ -17,6 +17,9 @@ func _ready():
 	for i in range(count):
 		generate_agar(i, count)
 
+func is_single_screen():
+	return false
+
 func step(delta):
 	bot.rotation += turn_vel * turn * delta
 	var theta = bot.rotation
