@@ -115,11 +115,17 @@ func _on_exit_pressed():
 	queue_free()
 	get_tree().change_scene("res://Scenes/Menu/Main.tscn")
 
-# Workaround for https://github.com/godotengine/godot/issues/43284
 func _process(_delta):
 	var mouse_pos = get_local_mouse_position()
 	var is_mouse_in_small_vp = $SmallViewport.get_rect().has_point(mouse_pos)
+	
+	# Workaround for https://github.com/godotengine/godot/issues/43284
 	$BigViewport.set_process_input(not is_mouse_in_small_vp)
+	
+	if is_mouse_in_small_vp:
+		$SmallViewport.modulate = Color(1, 1, 1, 1)
+	else:
+		$SmallViewport.modulate = Color(1, 1, 1, 0.4)
 
 func _on_SmallViewport_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
