@@ -17,9 +17,15 @@ var connect_node : Control = null
 var connect_to : Control = null
 var connect_type
 
-var drag = false
-
 var viewport
+
+var is_menu_mode = false
+
+func set_menu_mode():
+	viewport = get_viewport()
+	var camera = Global.get_camera_2d(viewport)
+	camera.can_move = false
+	is_menu_mode = true
 
 func _ready():
 	viewport = get_viewport()
@@ -95,6 +101,8 @@ func get_pin_position(node, conn_type):
 		return pin.rect_global_position + pin.rect_size / 2
 
 func _add_node(position):
+	if is_menu_mode:
+		return
 	var node = Node.instance()
 	add_child(node)
 	node.rect_size = Vector2(80, 80)
@@ -144,6 +152,12 @@ func _unhandled_input(event):
 		and event.button_index == BUTTON_LEFT:
 		get_tree().set_input_as_handled()
 		_add_node(Global.scr_to_vp(event.position, get_viewport()))
+
+# Workaround to prevent the user from moving nodes while in menu mode
+func _input(event):
+	if is_menu_mode:
+		if event is InputEventMouseMotion:
+			get_tree().set_input_as_handled()
 
 func _on_node_delete(node):
 	if node.is_deletable:

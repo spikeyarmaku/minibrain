@@ -16,6 +16,7 @@ func _ready():
 	var camera = Global.get_camera_2d(get_viewport())
 	camera.zoom *= 0.7
 	editor.set_inputs_outputs([["Main\nMenu"], menu_points])
+	editor.set_menu_mode()
 	main_menu_node = editor.input_nodes[0]
 	for i in range(editor.output_nodes.size()):
 		var n = editor.output_nodes[i]
