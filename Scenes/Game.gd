@@ -5,8 +5,8 @@ extends Control
 
 var level_blueprint
 
-var big_vp : Viewport
-var small_vp : Viewport
+var big_vpc : ViewportContainer
+var small_vpc : ViewportContainer
 var level
 var editor
 var control_panel
@@ -21,9 +21,11 @@ var movable_camera = preload("res://Scenes/MovableCamera.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	big_vp = $BigViewport/Viewport
-	small_vp = $SmallViewport/Viewport
-	editor = $BigViewport/Viewport/Editor
+	big_vpc = $MissionViewport
+	small_vpc = $EditorViewport
+	big_vpc.connect("gui_input", self, "_on_BigViewport_gui_input")
+	small_vpc.connect("gui_input", self, "_on_SmallViewport_gui_input")
+	editor = $EditorViewport/Viewport/Editor
 	# --
 	level_blueprint = Global.missions[Global.current_mission][1]
 	load_level(level_blueprint)
@@ -48,11 +50,9 @@ func load_level(level_blueprint):
 	if not level.is_single_screen:
 		camera.can_move = true
 	level.connect("completed", self, "_on_level_completed")
-	if editor.get_parent() == big_vp:
-		small_vp.add_child(level)
+	$MissionViewport/Viewport.add_child(level)
+	if editor.get_parent().get_parent() == big_vpc:
 		camera.zoom *= 4
-	else:
-		big_vp.add_child(level)
 
 func _on_level_completed(success):
 	is_completed = true
@@ -100,16 +100,24 @@ func step():
 	level.step(simulation_delta)
 
 func swap_viewports():
-	var big_vp_viewport = big_vp.get_child(0)
-	var small_vp_viewport = small_vp.get_child(0)
-	big_vp.remove_child(big_vp_viewport)
-	small_vp.add_child(big_vp_viewport)
-	big_vp_viewport.set_owner(small_vp)
-	small_vp.remove_child(small_vp_viewport)
-	big_vp.add_child(small_vp_viewport)
-	small_vp_viewport.set_owner(big_vp)
-	Global.get_camera_2d(big_vp).zoom *= 0.25
-	Global.get_camera_2d(small_vp).zoom *= 4
+	big_vpc.disconnect("gui_input", self, "_on_BigViewport_gui_input")
+	small_vpc.disconnect("gui_input", self, "_on_SmallViewport_gui_input")
+	var temp = small_vpc
+	small_vpc = big_vpc
+	big_vpc = temp
+	var temp_anchor_left = small_vpc.anchor_left
+	var temp_anchor_top = small_vpc.anchor_top
+	small_vpc.anchor_left = big_vpc.anchor_left
+	small_vpc.anchor_top = big_vpc.anchor_top
+	big_vpc.anchor_left = temp_anchor_left
+	big_vpc.anchor_top = temp_anchor_top
+	Global.get_camera_2d(big_vpc).zoom *= 0.25
+	Global.get_camera_2d(small_vpc).zoom *= 4
+	big_vpc.get_node("Viewport").gui_disable_input = false
+	small_vpc.get_node("Viewport").gui_disable_input = true
+	big_vpc.connect("gui_input", self, "_on_BigViewport_gui_input")
+	small_vpc.connect("gui_input", self, "_on_SmallViewport_gui_input")
+	move_child(big_vpc, 0)
 
 func _on_exit_pressed():
 	queue_free()
@@ -117,15 +125,16 @@ func _on_exit_pressed():
 
 func _process(_delta):
 	var mouse_pos = get_local_mouse_position()
-	var is_mouse_in_small_vp = $SmallViewport.get_rect().has_point(mouse_pos)
+	var is_mouse_in_small_vp = small_vpc.get_rect().has_point(mouse_pos)
 	
 	# Workaround for https://github.com/godotengine/godot/issues/43284
-	$BigViewport.set_process_input(not is_mouse_in_small_vp)
+	var big_vp = big_vpc.get_node("Viewport")
+	big_vp.set_process_input(not is_mouse_in_small_vp)
 	
 	if is_mouse_in_small_vp:
-		$SmallViewport.modulate = Color(1, 1, 1, 1)
+		small_vpc.modulate = Color(1, 1, 1, 1)
 	else:
-		$SmallViewport.modulate = Color(1, 1, 1, 0.4)
+		small_vpc.modulate = Color(1, 1, 1, 0.4)
 
 func _on_SmallViewport_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
@@ -135,4 +144,4 @@ func _on_SmallViewport_gui_input(event):
 # Workaround for https://github.com/godotengine/godot/issues/26181
 # Also mentioned in https://github.com/godotengine/godot/issues/17326
 func _on_BigViewport_gui_input(event):
-	$BigViewport/Viewport.unhandled_input(event)
+	big_vpc.get_node("Viewport").unhandled_input(event)

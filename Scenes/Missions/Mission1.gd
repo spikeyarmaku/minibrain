@@ -6,13 +6,13 @@ signal completed(success)
 
 # Controls whether or not to have a camera that's movable and zoomable by the
 # player
-var is_single_screen = true
+var is_single_screen = false
 
 var button_pressed = false
 var elapsed_time = 0
 
 const time_between_presses = 1
-const press_amount = 70
+const press_amount = 30
 const simulation_period = 10 # Run the simulation for 10 seconds total
 const sample_rate = 0.1 # Take a sample every 100 ms
 const target = 500 # The cumulative error should be no greater than 500
@@ -24,7 +24,14 @@ var last_sample_time = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$TargetAmount.text = str(target)
+	var tween = Tween.new()
+	var timeout = 10
+	add_child(tween)
+	tween.interpolate_property($PlayLabel, "self_modulate:a", 1, 0, timeout)
+	tween.interpolate_property($EditorLabel, "self_modulate:a", 1, 0, timeout)
+	tween.interpolate_property($PlayArrow, "self_modulate:a", 1, 0, timeout)
+	tween.interpolate_property($EditorArrow, "self_modulate:a", 1, 0, timeout)
+	tween.start()
 
 # Advances the simulation by a frame. `delta` gives you the time by which the
 # current frame should advance.
@@ -41,7 +48,6 @@ func step(delta):
 		if button_pressed:
 			button_value = 100
 		diff += abs(button_value - $Light.color.a * 100)
-		$ErrorAmount.text = str(diff)
 	
 	# Update button state
 	var new_button_state = sin(PI + elapsed_time * PI) > 0

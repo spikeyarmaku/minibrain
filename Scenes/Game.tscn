@@ -64,7 +64,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BigViewport" type="ViewportContainer" parent="."]
+[node name="MissionViewport" type="ViewportContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 stretch = true
@@ -72,15 +72,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="BigViewport"]
+[node name="Viewport" type="Viewport" parent="MissionViewport"]
 size = Vector2( 1024, 600 )
 handle_input_locally = false
 usage = 0
 render_target_update_mode = 3
 
-[node name="Editor" parent="BigViewport/Viewport" instance=ExtResource( 1 )]
-
-[node name="SmallViewport" type="ViewportContainer" parent="."]
+[node name="EditorViewport" type="ViewportContainer" parent="."]
 anchor_left = 0.75
 anchor_top = 0.75
 anchor_right = 1.0
@@ -90,12 +88,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="SmallViewport"]
+[node name="Viewport" type="Viewport" parent="EditorViewport"]
 size = Vector2( 256, 150 )
 handle_input_locally = false
 usage = 0
 render_target_update_mode = 3
 gui_disable_input = true
+
+[node name="Editor" parent="EditorViewport/Viewport" instance=ExtResource( 1 )]
 
 [node name="ControlPanel" type="HBoxContainer" parent="."]
 anchor_left = 0.5
@@ -194,5 +194,13 @@ bbcode_enabled = true
 bbcode_text = "[center]SUCCESS[/center]"
 text = "SUCCESS"
 
-[connection signal="gui_input" from="BigViewport" to="." method="_on_BigViewport_gui_input"]
-[connection signal="gui_input" from="SmallViewport" to="." method="_on_SmallViewport_gui_input"]
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_left = 0.75
+anchor_top = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.0705882 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,9 +1,13 @@
-[gd_resource type="Theme" load_steps=2 format=2]
+[gd_resource type="Theme" load_steps=3 format=2]
 
-[ext_resource path="res://data/default_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 1 )
 
 [resource]
-default_font = ExtResource( 1 )
+default_font = SubResource( 1 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
