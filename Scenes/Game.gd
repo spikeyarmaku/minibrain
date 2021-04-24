@@ -26,6 +26,7 @@ func _ready():
 	big_vpc.connect("gui_input", self, "_on_BigViewport_gui_input")
 	small_vpc.connect("gui_input", self, "_on_SmallViewport_gui_input")
 	editor = $EditorViewport/Viewport/Editor
+	Global.get_camera_2d(editor.get_parent()).zoom *= 4
 	# --
 	level_blueprint = Global.missions[Global.current_mission][1]
 	load_level(level_blueprint)
@@ -42,8 +43,8 @@ func _ready():
 	# --
 	_on_pause()
 
-func load_level(level_blueprint):
-	level = level_blueprint.instance()
+func load_level(blueprint):
+	level = blueprint.instance()
 	var camera = movable_camera.instance()
 	level.add_child(camera)
 	camera.current = true
@@ -66,7 +67,10 @@ func _on_level_completed(success):
 	timer.connect("timeout", self, "_on_timer_timeout")
 	
 func _on_timer_timeout():
-	get_tree().change_scene("res://Scenes/Game.tscn")
+	if Global.current_mission == Global.missions.size():
+		get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+	else:
+		get_tree().change_scene("res://Scenes/Game.tscn")
 
 func _on_reset():
 	if level.has_method("reset"):

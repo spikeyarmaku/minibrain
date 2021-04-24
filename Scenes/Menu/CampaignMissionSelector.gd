@@ -26,7 +26,6 @@ func _on_node_gui_input(event, node_index):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
 		and event.pressed:
 		if node_index == menu_points.size() - 1: # Go back
-# warning-ignore:return_value_discarded
 			get_tree().change_scene("res://Scenes/Menu/MissionSelector.tscn")
 		else:
 			Global.current_mission = node_index

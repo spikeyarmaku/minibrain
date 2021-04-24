@@ -34,17 +34,18 @@ func _ready():
 	camera.can_move = true
 
 func set_inputs_outputs(strings):
+	var root_size = get_tree().get_root().size
 	var input_strings = strings[0]
 	var output_strings = strings[1]
-	var in_v_step = viewport.size.y / (input_strings.size() + 1)
-	var out_v_step = viewport.size.y / (output_strings.size() + 1)
+	var in_v_step = root_size.y / (input_strings.size() + 1)
+	var out_v_step = root_size.y / (output_strings.size() + 1)
 	for i in input_strings.size():
-		var pos_x = -viewport.size.x / 4
-		var pos_y = -viewport.size.y / 2 + (i + 1) * in_v_step
+		var pos_x = -root_size.x / 4
+		var pos_y = -root_size.y / 2 + (i + 1) * in_v_step
 		add_input_node(input_strings[i], Vector2(pos_x, pos_y))
 	for i in output_strings.size():
-		var pos_x = viewport.size.x / 8
-		var pos_y = -viewport.size.y / 2 + (i + 1) * out_v_step
+		var pos_x = root_size.x / 8
+		var pos_y = -root_size.y / 2 + (i + 1) * out_v_step
 		add_output_node(output_strings[i], Vector2(pos_x, pos_y))
 
 func add_input_node(label, position):

@@ -26,7 +26,6 @@ func _on_node_gui_input(event, node_name):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
 		and event.pressed:
 		if node_name == menu_points[0]: # New game
-# warning-ignore:return_value_discarded
 			get_tree().change_scene("res://Scenes/Menu/MissionSelector.tscn")
 		elif node_name == menu_points[1]: # Quit
 			get_tree().quit()

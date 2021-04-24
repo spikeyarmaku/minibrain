@@ -23,7 +23,6 @@ func _on_node_gui_input(event, node_name):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
 		and event.pressed:
 		if node_name == menu_points[0]: # Campaign
-# warning-ignore:return_value_discarded
 			get_tree().change_scene("res://Scenes/Menu/CampaignMissionSelector.tscn")
 		elif node_name == menu_points[1]: # Custom
 			get_tree().change_scene("res://Scenes/Menu/CustomMissionSelector.tscn")

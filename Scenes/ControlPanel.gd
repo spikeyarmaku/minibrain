@@ -41,13 +41,9 @@ func _ready():
 	btn_play  = $ButtonPlay
 	btn_pause = $ButtonPause
 	btn_step  = $ButtonStep
-# warning-ignore:return_value_discarded
 	btn_reset.connect("pressed", self, "_on_reset_pressed")
-# warning-ignore:return_value_discarded
 	btn_play.connect( "pressed", self, "_on_play_pressed")
-# warning-ignore:return_value_discarded
 	btn_pause.connect("pressed", self, "_on_pause_pressed")
-# warning-ignore:return_value_discarded
 	btn_step.connect( "pressed", self, "_on_step_pressed")
 
 func _on_reset_pressed():
