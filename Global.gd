@@ -4,12 +4,13 @@ extends Node
 # var mission_agar = preload("res://Scenes/Missions/Agar.tscn")
 const mission1 = preload("res://Scenes/Missions/Mission1.tscn")
 const mission2 = preload("res://Scenes/Missions/Mission2.tscn")
-const mission3 = null
+const mission3 = preload("res://Scenes/Missions/Mission3.tscn")
 
 const missions = \
 	[ ["1. Lamp", mission1]
 	, ["2. Two\nLamps", mission2]
-	, ["3. Disco", mission3] ]
+	, ["3. Disco", mission3]
+	]
 
 var current_mission = 0
 # End of mission definitions

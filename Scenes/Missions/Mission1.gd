@@ -15,10 +15,8 @@ const time_between_presses = 1
 const press_amount = 30
 const simulation_period = 10 # Run the simulation for 10 seconds total
 const sample_rate = 0.1 # Take a sample every 100 ms
-const target = 500 # The cumulative error should be no greater than 500
+const target = 5 # The cumulative error should be no greater than this value
 
-var button_states = []
-var light_states = []
 var diff = 0
 var last_sample_time = 0
 
@@ -42,12 +40,10 @@ func step(delta):
 	# Sample light and button states
 	if elapsed_time - last_sample_time > sample_rate:
 		last_sample_time += sample_rate
-		button_states.append(button_pressed)
-		light_states.append($Light.color.a)
 		var button_value = 0
 		if button_pressed:
-			button_value = 100
-		diff += abs(button_value - $Light.color.a * 100)
+			button_value = 1
+		diff += abs(button_value - $Light.color.a)
 	
 	# Update button state
 	var new_button_state = sin(PI + elapsed_time * PI) > 0

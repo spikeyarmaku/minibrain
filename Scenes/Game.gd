@@ -63,16 +63,24 @@ func _on_level_completed(success):
 		$CenterContainer/PanelContainer/RichTextLabel.bbcode_text = \
 			"[center]FAILED[/center]"
 	$CenterContainer.visible = true
-	var timer = get_tree().create_timer(2)
-	timer.connect("timeout", self, "_on_timer_timeout")
-	
-func _on_timer_timeout():
-	if Global.current_mission == Global.missions.size():
-		get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+	var timeout = 2
+	if not success:
+		timeout = 0.8
+	var timer = get_tree().create_timer(timeout)
+	timer.connect("timeout", self, "_on_timer_timeout", [success])
+
+func _on_timer_timeout(success):
+	if success:
+		if Global.current_mission == Global.missions.size():
+			get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+		else:
+			get_tree().change_scene("res://Scenes/Game.tscn")
 	else:
-		get_tree().change_scene("res://Scenes/Game.tscn")
+		$CenterContainer.visible = false
+		_on_reset()
 
 func _on_reset():
+	_on_pause()
 	if level.has_method("reset"):
 		level.reset()
 	else:
