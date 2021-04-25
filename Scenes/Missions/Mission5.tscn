@@ -1,0 +1,130 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scenes/Missions/Mission5.gd" type="Script" id=1]
+[ext_resource path="res://data/missions/mission5/breadboard.png" type="Texture" id=2]
+[ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 22
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+Label/colors/font_color = Color( 1, 1, 1, 1 )
+Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = null
+Label/styles/normal = null
+
+[node name="Mission5" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Slider" type="Polygon2D" parent="."]
+position = Vector2( -458.256, -487.91 )
+scale = Vector2( 0.097586, 0.469559 )
+color = Color( 0.0470588, 0.239216, 0.447059, 1 )
+offset = Vector2( 467.083, 952.083 )
+polygon = PoolVector2Array( 149.388, 373.662, 147.191, 451.318, 346.545, 451.779, 346.545, 372.606, 254.538, 356.771 )
+
+[node name="Light1" type="Polygon2D" parent="."]
+position = Vector2( -509.313, -36.8244 )
+scale = Vector2( 0.426693, 0.426693 )
+color = Color( 0.760784, 0.87451, 0.101961, 0 )
+polygon = PoolVector2Array( 675.771, 251.819, 686.883, 286.742, 712.281, 334.364, 751.966, 366.112, 801.176, 381.986, 845.623, 378.811, 896.42, 358.175, 928.168, 326.427, 953.566, 278.805, 956.741, 231.183, 944.042, 183.561, 920.231, 148.638, 871.021, 116.89, 823.399, 105.778, 778.952, 112.128, 742.442, 129.589, 707.519, 156.575, 682.12, 204.197 )
+
+[node name="Light2" type="Polygon2D" parent="."]
+position = Vector2( -377.966, -37.4543 )
+scale = Vector2( 0.426693, 0.426693 )
+color = Color( 0.760784, 0.87451, 0.101961, 0 )
+polygon = PoolVector2Array( 675.771, 251.819, 686.883, 286.742, 712.281, 334.364, 751.966, 366.112, 801.176, 381.986, 845.623, 378.811, 896.42, 358.175, 928.168, 326.427, 953.566, 278.805, 956.741, 231.183, 944.042, 183.561, 920.231, 148.638, 871.021, 116.89, 823.399, 105.778, 778.952, 112.128, 742.442, 129.589, 707.519, 156.575, 682.12, 204.197 )
+
+[node name="Light3" type="Polygon2D" parent="."]
+position = Vector2( -244.729, -37.1394 )
+scale = Vector2( 0.426693, 0.426693 )
+color = Color( 0.760784, 0.87451, 0.101961, 0 )
+polygon = PoolVector2Array( 675.771, 251.819, 686.883, 286.742, 712.281, 334.364, 751.966, 366.112, 801.176, 381.986, 845.623, 378.811, 896.42, 358.175, 928.168, 326.427, 953.566, 278.805, 956.741, 231.183, 944.042, 183.561, 920.231, 148.638, 871.021, 116.89, 823.399, 105.778, 778.952, 112.128, 742.442, 129.589, 707.519, 156.575, 682.12, 204.197 )
+
+[node name="Light4" type="Polygon2D" parent="."]
+position = Vector2( -113.068, -36.8244 )
+scale = Vector2( 0.426693, 0.426693 )
+color = Color( 0.760784, 0.87451, 0.101961, 0 )
+polygon = PoolVector2Array( 675.771, 251.819, 686.883, 286.742, 712.281, 334.364, 751.966, 366.112, 801.176, 381.986, 845.623, 378.811, 896.42, 358.175, 928.168, 326.427, 953.566, 278.805, 956.741, 231.183, 944.042, 183.561, 920.231, 148.638, 871.021, 116.89, 823.399, 105.778, 778.952, 112.128, 742.442, 129.589, 707.519, 156.575, 682.12, 204.197 )
+
+[node name="breadboard" type="Sprite" parent="."]
+position = Vector2( -69.5794, 79.4156 )
+scale = Vector2( 0.598301, 0.598301 )
+texture = ExtResource( 2 )
+
+[node name="Goal" type="RichTextLabel" parent="."]
+margin_left = -446.654
+margin_top = 190.117
+margin_right = 306.346
+margin_bottom = 231.117
+theme = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+text = "At each 20% the slider has travelled, another light should light up"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label1" type="RichTextLabel" parent="."]
+margin_left = -165.875
+margin_top = 130.054
+margin_right = -151.875
+margin_bottom = 171.054
+theme = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+text = "1
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="RichTextLabel" parent="."]
+margin_left = -34.0222
+margin_top = 129.163
+margin_right = -20.0222
+margin_bottom = 170.163
+theme = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+text = "2
+
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="RichTextLabel" parent="."]
+margin_left = 96.94
+margin_top = 129.163
+margin_right = 110.94
+margin_bottom = 170.163
+theme = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+text = "3
+
+"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="RichTextLabel" parent="."]
+margin_left = 229.684
+margin_top = 126.491
+margin_right = 243.684
+margin_bottom = 167.491
+theme = SubResource( 2 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+text = "4"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}

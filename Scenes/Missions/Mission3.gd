@@ -4,10 +4,6 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
-# Controls whether or not to have a camera that's movable and zoomable by the
-# player
-var is_single_screen = false
-
 var left_button_pressed = false
 var right_button_pressed = false
 var elapsed_time = 0

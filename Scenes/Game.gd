@@ -48,8 +48,7 @@ func load_level(blueprint):
 	var camera = movable_camera.instance()
 	level.add_child(camera)
 	camera.current = true
-	if not level.is_single_screen:
-		camera.can_move = true
+	camera.can_move = true
 	level.connect("completed", self, "_on_level_completed")
 	$MissionViewport/Viewport.add_child(level)
 	if editor.get_parent().get_parent() == big_vpc:
@@ -77,6 +76,7 @@ func _on_timer_timeout(success):
 			get_tree().change_scene("res://Scenes/Game.tscn")
 	else:
 		$CenterContainer.visible = false
+		is_completed = false
 		_on_reset()
 
 func _on_reset():
