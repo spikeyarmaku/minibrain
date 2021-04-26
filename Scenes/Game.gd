@@ -57,6 +57,8 @@ func load_level(blueprint):
 func _on_level_completed(success):
 	is_completed = true
 	if success:
+		$CenterContainer/PanelContainer/RichTextLabel.bbcode_text = \
+			"[center]SUCCESS[/center]"
 		Global.current_mission += 1
 	else:
 		$CenterContainer/PanelContainer/RichTextLabel.bbcode_text = \

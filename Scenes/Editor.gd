@@ -5,6 +5,8 @@ extends Node2D
 const Node = preload("res://Scenes/Editor/Node.tscn")
 const Edge = preload("res://Scenes/Editor/Edge.tscn")
 
+const menu_max_item_height = 5
+
 var input_nodes = []
 var output_nodes = []
 
@@ -47,6 +49,30 @@ func set_inputs_outputs(strings):
 		var pos_x = root_size.x / 8
 		var pos_y = -root_size.y / 2 + (i + 1) * out_v_step
 		add_output_node(output_strings[i], Vector2(pos_x, pos_y))
+
+func set_inputs_outputs_as_menu(strings):
+	var root_size = get_tree().get_root().size
+	var input_strings = strings[0]
+	var output_strings = strings[1]
+	var in_v_step = root_size.y / (input_strings.size() + 1)
+	var out_v_step = root_size.y / (min(output_strings.size(), menu_max_item_height) + 1)
+	var out_h_step = 120
+	for i in input_strings.size():
+		var pos_x = -root_size.x / 4
+		var pos_y = -root_size.y / 2 + (i + 1) * in_v_step
+		add_input_node(input_strings[i], Vector2(pos_x, pos_y))
+	var counter = 0
+	var column = 0
+	for i in output_strings.size():
+		var pos_x = root_size.x / 8 + column * out_h_step
+		var pos_y = -root_size.y / 2 + (counter + 1) * out_v_step
+		add_output_node(output_strings[i], Vector2(pos_x, pos_y))
+		
+		if counter >= menu_max_item_height - 1:
+			column += 1
+			counter = 0
+		else:
+			counter += 1
 
 func add_input_node(label, position):
 	var node = _add_node(position)
