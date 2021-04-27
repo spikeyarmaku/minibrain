@@ -4,6 +4,12 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
+# Tells the editor what inputs and outputs should it have
+const title = "Inverter"
+const notes = ""
+const inputs = ["signal"]
+const outputs = ["light"]
+
 var button_pressed = false
 var elapsed_time = 0
 
@@ -49,10 +55,6 @@ func step(delta):
 
 func _draw():
 	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["signal"], ["light"]]
 
 # Provides the input nodes with values
 func provide_inputs():

@@ -4,6 +4,17 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
+# Tells the editor what inputs and outputs should it have
+const title = "Volume Display"
+const notes = "[fill]" +\
+"You will notice a slight delay between the input and the output.\n" +\
+"The reason is that in each frame, every node and every edge will get " +\
+"updated once. Therefore, if two nodes are connected, any change will take " +\
+"two frames to propagate through them." +\
+"[/fill]"
+const inputs = ["slider"]
+const outputs = ["light1", "light2", "light3", "light4"]
+
 var slider_position = 0
 var target_position = 0
 var slider_origin
@@ -55,10 +66,6 @@ func step(delta):
 
 func _draw():
 	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["slider"], ["light1", "light2", "light3", "light4"]]
 
 # Provides the input nodes with values
 func provide_inputs():

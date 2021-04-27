@@ -14,7 +14,7 @@ const mission9 = preload("res://Scenes/Missions/Mission9.tscn")
 const mission10 = preload("res://Scenes/Missions/Mission10.tscn")
 
 const missions = \
-	[ ["1. Lamp", mission1]
+	[ ["1. Intro", mission1]
 	, ["2. Two\nLamps", mission2]
 	, ["3. Disco", mission3]
 	, ["4. Slider", mission4]

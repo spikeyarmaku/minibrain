@@ -4,6 +4,16 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
+# Tells the editor what inputs and outputs should it have
+const title = "Disco"
+const notes = "[fill]" +\
+"To zoom with the camera, use the scrolling wheel.\n" +\
+"[img=30]res://data/icons/button_clear.png[/img] The clear button resets " +\
+"the brain.\n" +\
+"[/fill]"
+const inputs = ["left\nbutton", "right\nbutton"]
+const outputs = ["light 1", "light 2", "light 3", "light 4"]
+
 var left_button_pressed = false
 var right_button_pressed = false
 var left_button_value = 0
@@ -73,10 +83,6 @@ func step(delta):
 
 func _draw():
 	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["left\nbutton", "right\nbutton"], ["light 1", "light 2", "light 3", "light 4"]]
 
 # Provides the input nodes with values
 func provide_inputs():

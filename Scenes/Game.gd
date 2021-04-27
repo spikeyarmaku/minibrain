@@ -9,8 +9,7 @@ var big_vpc : ViewportContainer
 var small_vpc : ViewportContainer
 var level
 var editor
-var control_panel
-var btn_exit : TextureButton
+var gui
 
 var simulation_delta = 0
 
@@ -26,20 +25,20 @@ func _ready():
 	big_vpc.connect("gui_input", self, "_on_BigViewport_gui_input")
 	small_vpc.connect("gui_input", self, "_on_SmallViewport_gui_input")
 	editor = $EditorViewport/Viewport/Editor
+	gui = $GameGui
 	Global.get_camera_2d(editor.get_parent()).zoom *= 4
 	# --
 	level_blueprint = Global.missions[Global.current_mission][1]
 	load_level(level_blueprint)
-	editor.set_inputs_outputs(level.define_inputs_outputs())
+	editor.set_inputs_outputs([level.inputs, level.outputs])
 	# --
-	btn_exit = $ButtonExit
-	btn_exit.material.set_shader_param("btn_color", Color(1, 0.25, 0.25, 1))
-	btn_exit.connect("pressed", self, "_on_exit_pressed")
-	control_panel = $ControlPanel
-	control_panel.connect("reset", self, "_on_reset")
-	control_panel.connect("play", self, "_on_play")
-	control_panel.connect("pause", self, "_on_pause")
-	control_panel.connect("step", self, "_on_step")
+	gui.connect("exit", self, "_on_exit_pressed")
+	gui.connect("clear", self, "_on_clear_pressed")
+	gui.connect("reset", self, "_on_reset")
+	gui.connect("play", self, "_on_play")
+	gui.connect("pause", self, "_on_pause")
+	gui.connect("step", self, "_on_step")
+	gui.connect("notes", self, "_on_notes")
 	# --
 	_on_pause()
 
@@ -49,10 +48,17 @@ func load_level(blueprint):
 	level.add_child(camera)
 	camera.current = true
 	camera.can_move = true
+	camera.can_zoom = true
 	level.connect("completed", self, "_on_level_completed")
 	$MissionViewport/Viewport.add_child(level)
 	if editor.get_parent().get_parent() == big_vpc:
 		camera.zoom *= 4
+	gui.notes = level.notes
+	if gui.notes == null:
+		gui.notes = ""
+	gui.title = level.title
+	if gui.title == null:
+		gui.title = ""
 
 func _on_level_completed(success):
 	is_completed = true
@@ -92,11 +98,11 @@ func _on_reset():
 
 func _on_play():
 	is_running = true
-	control_panel.set_running()
+	gui.set_running()
 
 func _on_pause():
 	is_running = false
-	control_panel.set_paused()
+	gui.set_paused()
 
 func _on_step():
 	step()
@@ -136,6 +142,13 @@ func swap_viewports():
 func _on_exit_pressed():
 	queue_free()
 	get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+
+func _on_clear_pressed():
+	editor.clear()
+
+func _on_notes(is_active):
+	Global.get_camera_2d(editor.get_parent()).can_zoom = !is_active
+	Global.get_camera_2d(level.get_parent()).can_zoom = !is_active
 
 func _process(_delta):
 	var mouse_pos = get_local_mouse_position()

@@ -4,9 +4,12 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
-# Controls whether or not to have a camera that's movable and zoomable by the
-# player
-var is_single_screen = true
+# Tells the editor what inputs and outputs should it have
+const title = "Template Mission"
+const notes = "This is a mission template. " +\
+			  "Copy and modify it according to your needs."
+const inputs = ["input"]
+const outputs = ["output"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,10 +22,6 @@ func step(delta):
 
 func _draw():
 	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["input"], ["output"]]
 
 # Provides the input nodes with values
 func provide_inputs():

@@ -4,6 +4,22 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
+# Tells the editor what inputs and outputs should it have
+const title = "Introduction"
+const notes = "[fill]" +\
+"Welcome to MiniBrain. In this tutorial, you will learn how to play.\n" +\
+"- To edit the brain, click on the viewport in the lower right corner.\n" +\
+"- To connect two nodes in the editor, drag from the output pin of one node " +\
+"to the input pin of the other.\n" +\
+"[img=30]res://data/icons/button_play.png[/img] The play button starts the " +\
+"simulation." +\
+"[/fill]"
+
+const inputs = ["button"]
+const outputs = ["light"]
+
+# -----------------------------------------------------------------------------
+
 var button_pressed = false
 var elapsed_time = 0
 
@@ -17,15 +33,8 @@ var diff = 0
 var last_sample_time = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	var tween = Tween.new()
-	var timeout = 10
-	add_child(tween)
-	tween.interpolate_property($PlayLabel, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($EditorLabel, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($PlayArrow, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($EditorArrow, "self_modulate:a", 1, 0, timeout)
-	tween.start()
+#func _ready():
+#	pass
 
 # Advances the simulation by a frame. `delta` gives you the time by which the
 # current frame should advance.
@@ -51,13 +60,6 @@ func step(delta):
 	button_pressed = new_button_state
 	if elapsed_time > simulation_period:
 		emit_signal("completed", diff < target)
-
-func _draw():
-	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["button"], ["light"]]
 
 # Provides the input nodes with values
 func provide_inputs():

@@ -1,31 +1,15 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/Missions/Mission3.gd" type="Script" id=1]
 [ext_resource path="res://data/missions/mission3/breadboard.png" type="Texture" id=2]
 [ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 32
+size = 22
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=2]
 default_font = SubResource( 1 )
-Label/colors/font_color = Color( 1, 1, 1, 1 )
-Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
-Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
-Label/constants/line_spacing = 3
-Label/constants/shadow_as_outline = 0
-Label/constants/shadow_offset_x = 1
-Label/constants/shadow_offset_y = 1
-Label/fonts/font = null
-Label/styles/normal = null
-
-[sub_resource type="DynamicFont" id=3]
-size = 22
-font_data = ExtResource( 3 )
-
-[sub_resource type="Theme" id=4]
-default_font = SubResource( 3 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -77,29 +61,6 @@ scale = Vector2( 0.438077, 0.438077 )
 color = Color( 0.760784, 0.87451, 0.101961, 0 )
 polygon = PoolVector2Array( 675.771, 251.819, 686.883, 286.742, 712.281, 334.364, 751.966, 366.112, 801.176, 381.986, 845.623, 378.811, 896.42, 358.175, 928.168, 326.427, 953.566, 278.805, 956.741, 231.183, 944.042, 183.561, 920.231, 148.638, 871.021, 116.89, 823.399, 105.778, 778.952, 112.128, 742.442, 129.589, 707.519, 156.575, 682.12, 204.197 )
 
-[node name="ClearLabel" type="RichTextLabel" parent="."]
-margin_left = -500.021
-margin_top = -189.48
-margin_right = -228.021
-margin_bottom = -58.4794
-theme = SubResource( 2 )
-bbcode_enabled = true
-bbcode_text = "[center]This button
-clears the
-brain[/center]"
-text = "This button
-clears the
-brain"
-scroll_active = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ClearArrow" type="Polygon2D" parent="."]
-position = Vector2( -455.32, -207.311 )
-rotation = -6.96263
-polygon = PoolVector2Array( -8.69644, 10.232, 7.34943, 10.232, 7.34943, -15.2526, 17.7321, -15.2526, -0.201569, -43.0968, -17.6632, -16.1964, -9.6403, -16.1964 )
-
 [node name="breadboard" type="Sprite" parent="."]
 position = Vector2( -107.634, 88.9292 )
 scale = Vector2( 0.598301, 0.598301 )
@@ -110,7 +71,7 @@ margin_left = -459.061
 margin_top = 193.633
 margin_right = 293.939
 margin_bottom = 234.633
-theme = SubResource( 4 )
+theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "Left button should control lamp 1 and 3, the right should control the rest"
 scroll_active = false
@@ -123,7 +84,7 @@ margin_left = -296.122
 margin_top = 144.0
 margin_right = -282.122
 margin_bottom = 185.0
-theme = SubResource( 4 )
+theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "1"
 scroll_active = false
@@ -136,7 +97,7 @@ margin_left = -178.264
 margin_top = 68.795
 margin_right = -164.264
 margin_bottom = 109.795
-theme = SubResource( 4 )
+theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "2
 "
@@ -150,7 +111,7 @@ margin_left = -58.1605
 margin_top = 144.0
 margin_right = -44.1605
 margin_bottom = 185.0
-theme = SubResource( 4 )
+theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "3
 "
@@ -164,7 +125,7 @@ margin_left = 58.5756
 margin_top = 76.6523
 margin_right = 72.5756
 margin_bottom = 117.652
-theme = SubResource( 4 )
+theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 text = "4
 "

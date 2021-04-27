@@ -27,6 +27,7 @@ func set_menu_mode():
 	viewport = get_viewport()
 	var camera = Global.get_camera_2d(viewport)
 	camera.can_move = false
+	camera.can_zoom = false
 	is_menu_mode = true
 
 func _ready():
@@ -34,6 +35,7 @@ func _ready():
 	var camera = Global.get_camera_2d(viewport)
 	camera.position = Vector2(0, 0)
 	camera.can_move = true
+	camera.can_zoom = true
 
 func set_inputs_outputs(strings):
 	var root_size = get_tree().get_root().size
@@ -232,3 +234,11 @@ func calculate_outputs(inputs, delta):
 		outputs.append(n.get_output())
 	return outputs
 
+func clear():
+	var nodes_copy = nodes.duplicate()
+	var edges_copy = edges.duplicate()
+	for e in edges_copy:
+		e.emit_signal("delete")
+	for n in nodes_copy:
+		if n.node_type == Global.NODE_TYPE.INPUT_OUTPUT_NODE:
+			n.emit_signal("delete")

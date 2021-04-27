@@ -1,6 +1,7 @@
 extends Camera2D
 
 var can_move = false
+var can_zoom = true
 var drag = false
 var zoom_factor = 1.2
 
@@ -20,7 +21,7 @@ func _unhandled_input(event):
 			position -= event.relative * zoom
 		
 func _input(event):
-	if can_move:
+	if can_zoom:
 		if event is InputEventMouseButton and \
 			event.button_index == BUTTON_WHEEL_UP:
 			# TODO use a tween

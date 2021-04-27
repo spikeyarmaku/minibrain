@@ -4,6 +4,19 @@ extends Node2D
 # was completed successfully or not.
 signal completed(success)
 
+# Tells the editor what inputs and outputs should it have
+const title = "Slider"
+const notes = "[fill]" +\
+"To create a perceptron, double left-click in the editor.\n\n" +\
+"Perceptrons can have a bias. If the sum of the incoming signals is higher " +\
+"than this value, the perceptron becomes active.\n\n" +\
+"To change the bias, drag up or down with the right mouse button on the " +\
+"left side of the perceptron.\n" +\
+"Double right-clicking on it will reset it to zero." +\
+"[/fill]"
+const inputs = ["slider"]
+const outputs = ["light"]
+
 var slider_position = 0
 var target_position = 0
 var slider_origin
@@ -51,10 +64,6 @@ func step(delta):
 
 func _draw():
 	pass
-
-# Tells the editor what inputs and outputs should it have
-func define_inputs_outputs():
-	return [["slider"], ["light"]]
 
 # Provides the input nodes with values
 func provide_inputs():
