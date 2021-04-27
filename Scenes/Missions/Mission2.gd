@@ -30,15 +30,8 @@ var diff = 0
 var last_sample_time = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	var tween = Tween.new()
-	var timeout = 10
-	add_child(tween)
-	tween.interpolate_property($ResetLabel, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($StepLabel, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($ResetArrow, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($StepArrow, "self_modulate:a", 1, 0, timeout)
-	tween.start()
+#func _ready():
+#	pass
 
 # Advances the simulation by a frame. `delta` gives you the time by which the
 # current frame should advance.

@@ -34,12 +34,6 @@ var lights : Array
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	lights = [$Light1, $Light2, $Light3, $Light4]
-	var tween = Tween.new()
-	var timeout = 10
-	add_child(tween)
-	tween.interpolate_property($ClearLabel, "self_modulate:a", 1, 0, timeout)
-	tween.interpolate_property($ClearArrow, "self_modulate:a", 1, 0, timeout)
-	tween.start()
 
 # Advances the simulation by a frame. `delta` gives you the time by which the
 # current frame should advance.

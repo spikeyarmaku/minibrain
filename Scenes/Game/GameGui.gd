@@ -57,8 +57,9 @@ func set_paused():
 	control_panel.set_paused()
 
 func _input(event):
-	if not $PanelNotes.get_rect().has_point(event.position):
-		close_notes()
+	if event is InputEventMouseMotion:
+		if not $PanelNotes.get_rect().has_point(event.position):
+			close_notes()
 
 func _on_notes_pressed():
 	$PanelNotes/LabelNotes.bbcode_text = notes
