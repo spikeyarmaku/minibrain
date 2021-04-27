@@ -32,7 +32,7 @@ func step(delta):
 	if elapsed_time - last_sample_time > sample_rate:
 		diff += abs(correct_value - $Light.color.a)
 		last_sample_time += sample_rate
-		if left_button_pressed or right_button_pressed:
+		if not left_button_pressed and right_button_pressed:
 			correct_value = 1
 		else:
 			correct_value = 0
@@ -60,7 +60,7 @@ func _draw():
 
 # Tells the editor what inputs and outputs should it have
 func define_inputs_outputs():
-	return [["left\nbutton", "right\nbutton"], ["light"]]
+	return [["inhibit", "signal"], ["light"]]
 
 # Provides the input nodes with values
 func provide_inputs():

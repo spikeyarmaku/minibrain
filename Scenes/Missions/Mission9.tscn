@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Scenes/Missions/Mission6.gd" type="Script" id=1]
-[ext_resource path="res://data/missions/mission6/breadboard.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Missions/Mission9.gd" type="Script" id=1]
+[ext_resource path="res://data/missions/mission1/breadboard.png" type="Texture" id=2]
 [ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 24
+size = 28
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=2]
@@ -20,17 +20,11 @@ Label/constants/shadow_offset_y = 1
 Label/fonts/font = null
 Label/styles/normal = null
 
-[node name="Mission6" type="Node2D"]
+[node name="Mission9" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="ButtonLeft" type="Polygon2D" parent="."]
-position = Vector2( -548.178, -161.486 )
-scale = Vector2( 0.695144, 0.695144 )
-color = Color( 0.0470588, 0.239216, 0.447059, 1 )
-polygon = PoolVector2Array( 147.191, 355.426, 147.191, 451.318, 352.459, 452.816, 352.099, 355.388 )
-
-[node name="ButtonRight" type="Polygon2D" parent="."]
-position = Vector2( -300.178, -161.486 )
+[node name="Button" type="Polygon2D" parent="."]
+position = Vector2( -512.178, -163.486 )
 scale = Vector2( 0.695144, 0.695144 )
 color = Color( 0.0470588, 0.239216, 0.447059, 1 )
 polygon = PoolVector2Array( 147.191, 355.426, 147.191, 451.318, 352.459, 452.816, 352.099, 355.388 )
@@ -47,13 +41,13 @@ scale = Vector2( 0.502797, 0.502797 )
 texture = ExtResource( 2 )
 
 [node name="Goal" type="RichTextLabel" parent="."]
-margin_left = -475.0
-margin_top = 196.0
-margin_right = 233.0
-margin_bottom = 237.0
+margin_left = -496.0
+margin_top = 200.0
+margin_right = 212.0
+margin_bottom = 241.0
 theme = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
-text = "The lamp should light up when at least one button is pressed"
+text = "The lamp should light up when the button is not pressed"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false

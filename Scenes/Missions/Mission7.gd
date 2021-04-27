@@ -32,7 +32,7 @@ func step(delta):
 	if elapsed_time - last_sample_time > sample_rate:
 		diff += abs(correct_value - $Light.color.a)
 		last_sample_time += sample_rate
-		if left_button_pressed or right_button_pressed:
+		if left_button_pressed and right_button_pressed:
 			correct_value = 1
 		else:
 			correct_value = 0

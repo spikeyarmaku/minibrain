@@ -12,7 +12,7 @@ const time_between_presses = 1
 const press_amount = 30
 const simulation_period = 10 # Run the simulation for 10 seconds total
 const sample_rate = 0.1 # Take a sample every 100 ms
-const target = 10 # The cumulative error should be no greater than this value
+const target = 15 # The cumulative error should be no greater than this value
 
 var diff = 0
 var last_sample_time = 0
@@ -32,7 +32,8 @@ func step(delta):
 	if elapsed_time - last_sample_time > sample_rate:
 		diff += abs(correct_value - $Light.color.a)
 		last_sample_time += sample_rate
-		if left_button_pressed or right_button_pressed:
+		if (not left_button_pressed and right_button_pressed) or \
+		   (left_button_pressed and not right_button_pressed):
 			correct_value = 1
 		else:
 			correct_value = 0

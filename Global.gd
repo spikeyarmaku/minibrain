@@ -8,6 +8,10 @@ const mission3 = preload("res://Scenes/Missions/Mission3.tscn")
 const mission4 = preload("res://Scenes/Missions/Mission4.tscn")
 const mission5 = preload("res://Scenes/Missions/Mission5.tscn")
 const mission6 = preload("res://Scenes/Missions/Mission6.tscn")
+const mission7 = preload("res://Scenes/Missions/Mission7.tscn")
+const mission8 = preload("res://Scenes/Missions/Mission8.tscn")
+const mission9 = preload("res://Scenes/Missions/Mission9.tscn")
+const mission10 = preload("res://Scenes/Missions/Mission10.tscn")
 
 const missions = \
 	[ ["1. Lamp", mission1]
@@ -16,6 +20,10 @@ const missions = \
 	, ["4. Slider", mission4]
 	, ["5. Volume\nDisplay", mission5]
 	, ["6. OR\nGate", mission6]
+	, ["7. AND\nGate", mission7]
+	, ["8. Inhibition", mission8]
+	, ["9. Inverter", mission9]
+	, ["10. XOR\nGate", mission10]
 	]
 
 var current_mission = 0
