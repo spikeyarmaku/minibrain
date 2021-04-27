@@ -8,13 +8,13 @@ signal pause()
 signal step()
 signal notes(is_active)
 
-var notes
-var title
+var is_notes_open = false
+var is_hovering = false
 
 var control_panel
 var btn_exit : TextureButton
 var btn_clear : TextureButton
-var btn_notes : TextureButton
+var pnl_title : Panel
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,14 +23,13 @@ func _ready():
 	btn_exit.connect("pressed", self, "_on_exit_pressed")
 	btn_clear = $ButtonClear
 	btn_clear.connect("pressed", self, "_on_clear_pressed")
-	btn_notes = $ButtonNotes
-	btn_notes.connect("pressed", self, "_on_notes_pressed")
+	pnl_title = $PanelTitle
 	control_panel = $ControlPanel
 	control_panel.connect("reset", self, "_on_reset")
 	control_panel.connect("play", self, "_on_play")
 	control_panel.connect("pause", self, "_on_pause")
 	control_panel.connect("step", self, "_on_step")
-	$PanelNotes.visible = false
+	close_notes()
 
 func _on_exit_pressed():
 	emit_signal("exit")
@@ -58,15 +57,35 @@ func set_paused():
 
 func _input(event):
 	if event is InputEventMouseMotion:
+		if pnl_title.get_rect().has_point(event.position) and \
+		not is_hovering:
+			is_hovering = true
+			# Workaround for https://github.com/godotengine/godot/issues/43284
+			open_notes()
+		elif not pnl_title.get_rect().has_point(event.position) and \
+		is_hovering:
+			is_hovering = false
 		if not $PanelNotes.get_rect().has_point(event.position):
 			close_notes()
 
-func _on_notes_pressed():
-	$PanelNotes/LabelNotes.bbcode_text = notes
-	$PanelNotes/LabelTitle.text = title
-	$PanelNotes.visible = not $PanelNotes.visible
-	emit_signal("notes", $PanelNotes.visible)
+func set_title(title):
+	if title == null:
+		$PanelTitle/LabelTitle.text = ""
+	else:
+		$PanelTitle/LabelTitle.text = title
+	
+func set_notes(notes):
+	if notes == null:
+		$PanelNotes/LabelNotes.bbcode_text = ""
+	else:
+		$PanelNotes/LabelNotes.bbcode_text = notes
+
+func open_notes():
+	emit_signal("notes", true)
+	$PanelNotes.visible = true
+	is_notes_open = true
 
 func close_notes():
-	$PanelNotes.visible = false
 	emit_signal("notes", false)
+	$PanelNotes.visible = false
+	is_notes_open = false

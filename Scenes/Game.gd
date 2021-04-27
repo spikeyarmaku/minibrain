@@ -39,6 +39,7 @@ func _ready():
 	gui.connect("pause", self, "_on_pause")
 	gui.connect("step", self, "_on_step")
 	gui.connect("notes", self, "_on_notes")
+	gui.connect("notes_hover", self, "_on_notes_hover")
 	# --
 	_on_pause()
 
@@ -53,12 +54,8 @@ func load_level(blueprint):
 	$MissionViewport/Viewport.add_child(level)
 	if editor.get_parent().get_parent() == big_vpc:
 		camera.zoom *= 4
-	gui.notes = level.notes
-	if gui.notes == null:
-		gui.notes = ""
-	gui.title = level.title
-	if gui.title == null:
-		gui.title = ""
+	gui.set_title(level.title)
+	gui.set_notes(level.notes)
 
 func _on_level_completed(success):
 	is_completed = true
@@ -147,17 +144,16 @@ func _on_clear_pressed():
 	editor.clear()
 
 func _on_notes(is_active):
-	Global.get_camera_2d(editor.get_parent()).can_zoom = !is_active
-	Global.get_camera_2d(level.get_parent()).can_zoom = !is_active
-
+	Global.get_camera_2d(editor.get_parent()).can_zoom = not is_active
+	Global.get_camera_2d(level.get_parent()).can_zoom = not is_active
+	
 func _process(_delta):
 	var mouse_pos = get_local_mouse_position()
 	var is_mouse_in_small_vp = small_vpc.get_rect().has_point(mouse_pos)
 	
 	# Workaround for https://github.com/godotengine/godot/issues/43284
-	var big_vp = big_vpc.get_node("Viewport")
-	big_vp.set_process_input(not is_mouse_in_small_vp)
-	
+	big_vpc.set_process_input(not is_mouse_in_small_vp)
+
 	if is_mouse_in_small_vp:
 		small_vpc.modulate = Color(1, 1, 1, 1)
 	else:

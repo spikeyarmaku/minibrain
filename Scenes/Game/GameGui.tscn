@@ -9,13 +9,14 @@
 [ext_resource path="res://data/icons/button_step.png" type="Texture" id=7]
 [ext_resource path="res://data/icons/button_reset.png" type="Texture" id=8]
 [ext_resource path="res://data/icons/button_exit.png" type="Texture" id=9]
+[ext_resource path="res://data/icons/button_notes.png" type="Texture" id=10]
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=1]
 size = 24
 font_data = ExtResource( 1 )
 
-[sub_resource type="Theme" id=10]
-default_font = SubResource( 9 )
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -26,12 +27,42 @@ Label/constants/shadow_offset_y = 1
 Label/fonts/font = null
 Label/styles/normal = null
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+uniform vec4 btn_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV) * btn_color;
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+shader_param/btn_color = Plane( 1, 1, 1, 1 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 5 )
+shader_param/btn_color = Plane( 1, 1, 1, 1 )
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform vec4 btn_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV) * btn_color;
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+shader_param/btn_color = Plane( 1, 1, 1, 1 )
+
+[sub_resource type="DynamicFont" id=3]
 size = 24
 font_data = ExtResource( 1 )
 
-[sub_resource type="Theme" id=8]
-default_font = SubResource( 7 )
+[sub_resource type="Theme" id=4]
+default_font = SubResource( 3 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -41,40 +72,6 @@ Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
 Label/fonts/font = null
 Label/styles/normal = null
-
-[sub_resource type="Shader" id=11]
-code = "shader_type canvas_item;
-
-uniform vec4 btn_color = vec4(1.0, 1.0, 1.0, 1.0);
-
-void fragment() {
-	COLOR = texture(TEXTURE, UV) * btn_color;
-}"
-
-[sub_resource type="ShaderMaterial" id=12]
-shader = SubResource( 11 )
-shader_param/btn_color = Plane( 1, 1, 1, 1 )
-
-[sub_resource type="ShaderMaterial" id=13]
-shader = SubResource( 11 )
-shader_param/btn_color = Plane( 1, 1, 1, 1 )
-
-[sub_resource type="Shader" id=14]
-code = "shader_type canvas_item;
-
-uniform vec4 btn_color = vec4(1.0, 1.0, 1.0, 1.0);
-
-void fragment() {
-	COLOR = texture(TEXTURE, UV) * btn_color;
-}"
-
-[sub_resource type="ShaderMaterial" id=15]
-shader = SubResource( 14 )
-shader_param/btn_color = Plane( 1, 1, 1, 1 )
-
-[sub_resource type="StreamTexture" id=16]
-flags = 4
-load_path = "res://.import/button_notes.png-7b8ca0366d61ace421df0b1b9b368d2d.stex"
 
 [node name="GameGui" type="Control"]
 anchor_right = 1.0
@@ -87,10 +84,13 @@ __meta__ = {
 }
 
 [node name="PanelNotes" type="Panel" parent="."]
+visible = false
 anchor_top = 0.2
-anchor_right = 0.2
+anchor_right = 0.4
 anchor_bottom = 1.0
-margin_right = 191.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LabelNotes" type="RichTextLabel" parent="PanelNotes"]
 anchor_right = 1.0
@@ -99,22 +99,9 @@ margin_left = 20.0
 margin_top = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
-theme = SubResource( 10 )
+theme = SubResource( 2 )
 bbcode_enabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LabelTitle" type="RichTextLabel" parent="PanelNotes"]
-anchor_left = 0.2
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -50.0
-margin_right = -20.0
-margin_bottom = -10.0
-theme = SubResource( 8 )
-scroll_active = false
+text = "Lorem ipsum dolor sit amet"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -142,7 +129,7 @@ __meta__ = {
 }
 
 [node name="ButtonPlay" type="TextureButton" parent="ControlPanel"]
-material = SubResource( 12 )
+material = SubResource( 6 )
 margin_left = 61.0
 margin_right = 118.0
 margin_bottom = 60.0
@@ -155,7 +142,7 @@ __meta__ = {
 }
 
 [node name="ButtonPause" type="TextureButton" parent="ControlPanel"]
-material = SubResource( 13 )
+material = SubResource( 7 )
 margin_left = 122.0
 margin_right = 179.0
 margin_bottom = 60.0
@@ -180,7 +167,7 @@ __meta__ = {
 }
 
 [node name="ButtonExit" type="TextureButton" parent="."]
-material = SubResource( 15 )
+material = SubResource( 9 )
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -60.0
@@ -192,7 +179,7 @@ __meta__ = {
 }
 
 [node name="ButtonClear" type="TextureButton" parent="."]
-material = SubResource( 15 )
+material = SubResource( 9 )
 margin_right = 60.0
 margin_bottom = 60.0
 texture_normal = ExtResource( 4 )
@@ -201,13 +188,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonNotes" type="TextureButton" parent="."]
+[node name="PanelTitle" type="Panel" parent="."]
 anchor_top = 1.0
+anchor_right = 0.4
 anchor_bottom = 1.0
 margin_top = -60.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="IconNotes" type="TextureRect" parent="PanelTitle"]
 margin_right = 60.0
-texture_normal = SubResource( 16 )
+margin_bottom = 60.0
+mouse_filter = 2
+texture = ExtResource( 10 )
 expand = true
+
+[node name="LabelTitle" type="RichTextLabel" parent="PanelTitle"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 80.0
+margin_top = 15.0
+margin_right = -20.0
+margin_bottom = -10.0
+mouse_filter = 2
+theme = SubResource( 4 )
+text = "Title"
+scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }

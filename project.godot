@@ -18,7 +18,7 @@ config/name="MiniBrain"
 run/main_scene="res://Scenes/Menu/Main.tscn"
 config/icon="res://data/icons/program_icon/icon_256.png"
 config/macos_native_icon="res://data/icons/program_icon/icon_256.icns"
-config/windows_native_icon="res://data/icons/program_icon/Minibrain.ico"
+config/windows_native_icon="res://data/icons/program_icon/MiniBrain.ico"
 
 [autoload]
 
