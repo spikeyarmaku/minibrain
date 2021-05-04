@@ -146,11 +146,6 @@ func _add_node(position):
 
 # Checks if node1's output is connected to node2's input
 func _can_nodes_connect(node1, node2):
-	# Are they already connected? # NOTE - Bug Brain allows nodes to be
-	# connected multiple times
-#	for e in node1.outgoing_edges:
-#		if e.end_node == node2:
-#			return false
 	# Do they have the right pins? (E.g. 2 input-only nodes can't be connected)
 	if node1.get_output_pin() == null or node2.get_input_pin() == null:
 		return false

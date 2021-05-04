@@ -39,7 +39,6 @@ func _ready():
 	gui.connect("pause", self, "_on_pause")
 	gui.connect("step", self, "_on_step")
 	gui.connect("notes", self, "_on_notes")
-	gui.connect("notes_hover", self, "_on_notes_hover")
 	# --
 	_on_pause()
 
@@ -163,6 +162,15 @@ func _on_SmallViewport_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
 		event.button_index == BUTTON_LEFT:
 		swap_viewports()
+	elif event is InputEventMouseButton and \
+	(event.button_index == BUTTON_WHEEL_UP or \
+	event.button_index == BUTTON_WHEEL_DOWN):
+		var camera = Global.get_camera_2d(small_vpc.get_node("Viewport"))
+		camera._input(event)
+	elif (event is InputEventMouseButton and \
+	event.button_index == BUTTON_RIGHT) or event is InputEventMouseMotion:
+		var camera = Global.get_camera_2d(small_vpc.get_node("Viewport"))
+		camera._unhandled_input(event)
 
 # Workaround for https://github.com/godotengine/godot/issues/26181
 # Also mentioned in https://github.com/godotengine/godot/issues/17326

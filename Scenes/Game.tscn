@@ -5,12 +5,12 @@
 [ext_resource path="res://Scenes/Game.gd" type="Script" id=3]
 [ext_resource path="res://data/Roboto-Regular.ttf" type="DynamicFontData" id=9]
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=1]
 size = 72
 font_data = ExtResource( 9 )
 
-[sub_resource type="Theme" id=7]
-default_font = SubResource( 6 )
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -84,7 +84,7 @@ margin_top = 7.0
 margin_right = 807.0
 margin_bottom = 107.0
 rect_min_size = Vector2( 800, 100 )
-theme = SubResource( 7 )
+theme = SubResource( 2 )
 bbcode_enabled = true
 bbcode_text = "[center]SUCCESS[/center]"
 text = "SUCCESS"

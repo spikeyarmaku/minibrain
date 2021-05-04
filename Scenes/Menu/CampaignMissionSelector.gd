@@ -13,7 +13,7 @@ func _ready():
 		menu_points.append(m[0])
 	menu_points.append("Go\nback")
 	editor = $Editor
-	var camera = Global.get_camera_2d(get_viewport())
+#	var camera = Global.get_camera_2d(get_viewport())
 #	camera.zoom *= 0.7
 	editor.set_inputs_outputs_as_menu([["Select\nMission"], menu_points])
 	editor.set_menu_mode()

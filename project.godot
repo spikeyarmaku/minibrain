@@ -24,6 +24,10 @@ config/windows_native_icon="res://data/icons/program_icon/MiniBrain.ico"
 
 Global="*res://Global.gd"
 
+[debug]
+
+gdscript/warnings/return_value_discarded=false
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
