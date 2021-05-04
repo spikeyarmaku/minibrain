@@ -137,7 +137,10 @@ func swap_viewports():
 
 func _on_exit_pressed():
 	queue_free()
-	get_tree().change_scene("res://Scenes/Menu/Main.tscn")
+	get_tree().root.add_child(Global.menu)
+	Global.menu.owner = get_tree().root
+	get_tree().current_scene = Global.menu
+	get_tree().root.remove_child(self)
 
 func _on_clear_pressed():
 	editor.clear()

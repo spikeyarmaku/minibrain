@@ -28,6 +28,7 @@ TODO
 - Let the user add notes in the editor
 - Implement selection boxes
 - Save and load brains
+- Clicking on the "clear brain" button should ask for confirmation
 
 ### UI:
 - Add paging to menus with potentially lots of options

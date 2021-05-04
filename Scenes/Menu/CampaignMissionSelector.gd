@@ -29,11 +29,10 @@ func _on_node_gui_input(event, node_index):
 			get_tree().change_scene("res://Scenes/Menu/MissionSelector.tscn")
 		else:
 			Global.current_mission = node_index
-#			var game_instance = game.instance()
-#			game_instance.set_level(Global.missions[node_name])
-#			get_tree().get_root().add_child(game_instance)
-#			queue_free()
-			get_tree().change_scene("res://Scenes/Game.tscn")
+			Global.menu = self
+			var game = preload("res://Scenes/Game.tscn")
+			get_tree().root.add_child(game.instance())
+			get_tree().root.remove_child(self)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

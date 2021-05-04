@@ -27,6 +27,7 @@ const missions = \
 	]
 
 var current_mission = 0
+var menu
 # End of mission definitions
 
 enum PIN_TYPE {INPUT, OUTPUT}
