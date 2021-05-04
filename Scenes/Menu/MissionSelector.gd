@@ -35,3 +35,8 @@ func _process(_delta):
 		editor.connect_node = menu_title_node
 		editor.connect_type = Global.CONNECT_TYPE.OUTPUT_INPUT
 
+func _input(event):
+	if event is InputEventKey and event.scancode == KEY_ESCAPE and \
+	event.pressed:
+		get_tree().set_input_as_handled()
+		get_tree().change_scene("res://Scenes/Menu/Main.tscn")

@@ -161,6 +161,10 @@ func _process(_delta):
 	else:
 		small_vpc.modulate = Color(1, 1, 1, 0.4)
 
+func _input(event):
+	if event is InputEventKey and event.scancode == KEY_ESCAPE:
+		_on_exit_pressed()
+
 func _on_SmallViewport_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and \
 		event.button_index == BUTTON_LEFT:

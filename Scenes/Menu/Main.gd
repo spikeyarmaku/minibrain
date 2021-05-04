@@ -36,3 +36,7 @@ func _process(_delta):
 		editor.connect_node = main_menu_node
 		editor.connect_type = Global.CONNECT_TYPE.OUTPUT_INPUT
 
+func _input(event):
+	if event is InputEventKey and event.scancode == KEY_ESCAPE and \
+	event.pressed:
+		get_tree().quit()
