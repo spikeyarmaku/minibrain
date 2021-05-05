@@ -199,3 +199,9 @@ func update_value():
 		output_value = clamp(get_input_value() - get_bias(), -100.0, 100.0)
 	if output_value != _prev_output_value:
 		update()
+
+func reset():
+	_input_value = 0
+	output_value = 0
+	_prev_output_value = 0
+	update()

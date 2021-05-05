@@ -237,3 +237,9 @@ func clear():
 	for n in nodes_copy:
 		if n.node_type == Global.NODE_TYPE.INPUT_OUTPUT_NODE:
 			n.emit_signal("delete")
+
+func reset():
+	for n in nodes:
+		n.knob.reset()
+	for e in edges:
+		e.knob.reset()

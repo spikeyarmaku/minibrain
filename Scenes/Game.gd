@@ -85,6 +85,7 @@ func _on_timer_timeout(success):
 
 func _on_reset():
 	_on_pause()
+	editor.reset()
 	if level.has_method("reset"):
 		level.reset()
 	else:

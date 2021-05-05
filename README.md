@@ -16,7 +16,7 @@ Download the latest [release](https://github.com/spikeyarmaku/minibrain/releases
 
 ### Linux, MacOS:
 
-Build or run it from source using the Godot engine.
+Build or run it from source using version 3.3 of the Godot engine.
 
 ### Android, iOS:
 
@@ -34,11 +34,11 @@ TODO
 - Add paging to menus with potentially lots of options
 - Make it more obvious that pause doesn't reset
 - Different menus should have different background color
+- Create a mobile-friendly UI
 
 ### Input:
 - Use the project's input mapping instead of hard-coding input
-- Esc should get back one level
-- Add touchscreen controls as option
+- Add touchscreen controls for the mobile version
 
 ### Documentation:
 - Write a tutorial on how to add new levels

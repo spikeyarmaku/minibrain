@@ -250,3 +250,11 @@ func update_value(delta):
 		update()
 	
 	changed = false
+
+func reset():
+	_input_value = 0
+	_prev_input_value = 0
+	output_value = 0
+	_prev_output_value = 0
+	changed = false
+	update()
