@@ -12,7 +12,7 @@ var menu_points = ["New\nGame", "Quit"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	editor = $Editor
+	editor = $ViewportContainer/Viewport/Editor
 	var camera = Global.get_camera_2d(get_viewport())
 	camera.zoom *= 0.7
 	editor.set_inputs_outputs_as_menu([["Main\nMenu"], menu_points])
