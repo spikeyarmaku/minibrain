@@ -28,6 +28,10 @@ Global="*res://Global.gd"
 
 gdscript/warnings/return_value_discarded=false
 
+[display]
+
+window/energy_saving/keep_screen_on=false
+
 [rendering]
 
 quality/driver/driver_name="GLES2"

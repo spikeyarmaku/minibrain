@@ -30,6 +30,9 @@ var current_mission = 0
 var menu
 # End of mission definitions
 
+enum INPUT_MODE {TOUCH_INPUT, MOUSE_INPUT, AUTO_DETECT}
+var input_mode = INPUT_MODE.AUTO_DETECT
+
 enum PIN_TYPE {INPUT, OUTPUT}
 enum CONNECT_TYPE {INPUT_OUTPUT, OUTPUT_INPUT}
 enum KNOB_TYPE {NODE_KNOB, EDGE_KNOB}

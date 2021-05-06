@@ -21,6 +21,20 @@ func _ready():
 	for i in range(editor.output_nodes.size()):
 		var n = editor.output_nodes[i]
 		n.connect("gui_input", self, "_on_node_gui_input", [menu_points[i]])
+	var btn_input = $InputModeButton
+	if Global.input_mode == Global.INPUT_MODE.AUTO_DETECT:
+		if OS.has_touchscreen_ui_hint():
+			Global.input_mode = Global.INPUT_MODE.TOUCH_INPUT
+			btn_input.pressed = true
+		else:
+			Global.input_mode = Global.INPUT_MODE.MOUSE_INPUT
+			btn_input.pressed = false
+	else:
+		if Global.input_mode == Global.INPUT_MODE.TOUCH_INPUT:
+			btn_input.pressed = true
+		else:
+			btn_input.pressed = false
+	btn_input.connect("toggled", self, "_on_InputModeBUtton_toggled")
 
 func _on_node_gui_input(event, node_name):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT \
@@ -40,3 +54,9 @@ func _input(event):
 	if event is InputEventKey and event.scancode == KEY_ESCAPE and \
 	event.pressed:
 		get_tree().quit()
+
+func _on_InputModeBUtton_toggled(pressed):
+	if pressed:
+		Global.input_mode = Global.INPUT_MODE.TOUCH_INPUT
+	else:
+		Global.input_mode = Global.INPUT_MODE.MOUSE_INPUT
